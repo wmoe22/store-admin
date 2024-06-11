@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     console.log(userId);
 
     if (!userId) {
-      return null;
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const stores = await db.store.findMany({
@@ -20,8 +20,8 @@ export async function GET(req: Request) {
       },
     });
 
-    if (!stores) {
-      return null;
+    if (!stores || stores.length === 0) {
+      return new NextResponse("No stores found", { status: 404 });
     }
 
     return NextResponse.json(stores);

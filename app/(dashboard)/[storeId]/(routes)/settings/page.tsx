@@ -8,17 +8,21 @@ const SettingsPage = async ({ params }: { params: { storeId: string } }) => {
 
   if (!userId) {
     redirect("/sign-in");
+    return null;
   }
 
   const store = await db.store.findFirst({
     where: {
       id: params.storeId,
+      userId,
     },
   });
 
   if (!store) {
-    ("/");
+    redirect("/");
+    return null;
   }
+
   return (
     <>
       <Settings initialData={store} />

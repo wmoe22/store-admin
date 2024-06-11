@@ -49,9 +49,15 @@ export function Settings({ initialData }: SettingsFormProps) {
   const [open, setOpen] = useState(false);
   const params = useParams();
   const router = useRouter();
+
+  const defaultValues: SettingsFormValues = {
+    name: initialData.name,
+    logoUrl: initialData.logoUrl ?? undefined,
+  };
+
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues,
   });
 
   const onSubmit = async (data: SettingsFormValues) => {
@@ -66,6 +72,7 @@ export function Settings({ initialData }: SettingsFormProps) {
       setLoading(false);
     }
   };
+
   const onDelete = async () => {
     try {
       await axios.delete(`/api/stores/${params.storeId}`);
@@ -79,6 +86,7 @@ export function Settings({ initialData }: SettingsFormProps) {
       setOpen(false);
     }
   };
+
   return (
     <>
       <AlertModal
@@ -102,7 +110,7 @@ export function Settings({ initialData }: SettingsFormProps) {
                 <Form {...form}>
                   <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className=" w-full"
+                    className="w-full"
                   >
                     <CardHeader>
                       <CardTitle>Store Name</CardTitle>
