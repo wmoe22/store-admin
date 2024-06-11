@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { ApiAlert } from "./api-alert";
-import getOrigin from "./get-origin";
+import useGetOrigin from "./get-origin";
 
 interface ApiListProps {
   entityName: string;
@@ -11,7 +11,7 @@ interface ApiListProps {
 
 const ApiList = ({ entityId, entityName }: ApiListProps) => {
   const params = useParams();
-  const origin = getOrigin();
+  const origin = useGetOrigin();
 
   const baseUrl = `${origin}/api/${params.storeId}`;
   return (

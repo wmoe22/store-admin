@@ -29,7 +29,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import getOrigin from "../ui/get-origin";
+import useGetOrigin from "../ui/get-origin";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 
@@ -39,7 +39,7 @@ interface SettingsFormProps {
 
 const formSchema = z.object({
   name: z.string().min(1),
-  logoUrl: z.string(),
+  logoUrl: z.string().optional(),
 });
 
 type SettingsFormValues = z.infer<typeof formSchema>;
@@ -171,7 +171,7 @@ export function Settings({ initialData }: SettingsFormProps) {
             <ApiAlert
               title={"NEXT_PUBLIC_API_URL"}
               variant="public"
-              description={`${getOrigin()}/api/${params.storeId}`}
+              description={`${useGetOrigin()}/api/${params.storeId}`}
             />
           </div>
         </main>

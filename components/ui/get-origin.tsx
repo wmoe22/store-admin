@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const getOrigin = () => {
+const useGetOrigin = () => {
   const [mounted, setMounted] = useState(false);
   const origin =
     typeof window !== "undefined" && window.location.origin
@@ -17,4 +17,4 @@ const getOrigin = () => {
   return origin;
 };
 
-export default getOrigin;
+export default useGetOrigin;
