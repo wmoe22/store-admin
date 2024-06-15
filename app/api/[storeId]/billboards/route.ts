@@ -63,8 +63,12 @@ export async function GET(
         storeId: params.storeId,
       },
     });
-
-    return NextResponse.json(billboards);
+    return NextResponse.json(
+      { billboards },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Billboards [GET] error", error);
     return new NextResponse("Internal server error", { status: 500 });

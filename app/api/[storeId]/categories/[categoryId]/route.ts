@@ -27,7 +27,12 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(
+      { category },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Category_GET]", error);
     return new NextResponse("Internal Error", { status: 500 });

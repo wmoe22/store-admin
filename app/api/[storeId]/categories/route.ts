@@ -73,7 +73,12 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(categories);
+    return NextResponse.json(
+      { categories },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Categories [Post] error", error);
     return new NextResponse("Internal error", { status: 500 });
