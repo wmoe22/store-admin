@@ -49,7 +49,12 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(brand);
+    return NextResponse.json(
+      { brand },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Brand [Post] error", error);
     return new NextResponse("Internal error", { status: 500 });
@@ -71,7 +76,12 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(brands);
+    return NextResponse.json(
+      { brands },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Brands [Post] error", error);
     return new NextResponse("Internal error", { status: 500 });
