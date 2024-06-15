@@ -67,7 +67,12 @@ export async function POST(
     });
     console.log("f");
 
-    return NextResponse.json(discount);
+    return NextResponse.json(
+      { discount },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[DISCOUNTS_POST]", error);
     return new NextResponse("Internal error", { status: 500 });
@@ -114,7 +119,12 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(discounts);
+    return NextResponse.json(
+      { discounts },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[DISCOUNTS_GET]", error);
     return new NextResponse("Internal error", { status: 500 });

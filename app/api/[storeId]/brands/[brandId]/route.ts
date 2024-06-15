@@ -24,7 +24,12 @@ export async function GET(
       where: { id: params.storeId },
     });
 
-    return NextResponse.json(brand);
+    return NextResponse.json(
+      { brand },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Brand_GET]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -70,7 +75,12 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(brand);
+    return NextResponse.json(
+      { brand },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Brand_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -79,14 +89,14 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { storeId: string; sizeId: string } }
+  { params }: { params: { storeId: string; brandId: string } }
 ) {
   try {
     const { userId } = auth();
 
     if (!userId) return new NextResponse("Unauthenticated", { status: 401 });
 
-    if (!params.sizeId) {
+    if (!params.brandId) {
       return new NextResponse("Size id is required", { status: 400 });
     }
 
@@ -101,11 +111,16 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const size = await db.size.deleteMany({
-      where: { id: params.sizeId },
+    const brand = await db.brand.deleteMany({
+      where: { id: params.brandId },
     });
 
-    return NextResponse.json(size);
+    return NextResponse.json(
+      { brand },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Size_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });

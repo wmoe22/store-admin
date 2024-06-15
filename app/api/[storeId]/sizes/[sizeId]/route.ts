@@ -24,7 +24,12 @@ export async function GET(
       where: { id: params.sizeId },
     });
 
-    return NextResponse.json(size);
+    return NextResponse.json(
+      { size },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Size_GET]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -74,7 +79,12 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(size);
+    return NextResponse.json(
+      { size },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Size_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -109,7 +119,12 @@ export async function DELETE(
       where: { id: params.sizeId },
     });
 
-    return NextResponse.json(size);
+    return NextResponse.json(
+      { size },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Size_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });

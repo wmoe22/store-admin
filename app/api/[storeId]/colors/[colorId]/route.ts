@@ -24,7 +24,12 @@ export async function GET(
       where: { id: params.colorId },
     });
 
-    return NextResponse.json(color);
+    return NextResponse.json(
+      { color },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Color_GET]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -74,7 +79,12 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(color);
+    return NextResponse.json(
+      { color },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Color_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -109,7 +119,12 @@ export async function DELETE(
       where: { id: params.colorId },
     });
 
-    return NextResponse.json(color);
+    return NextResponse.json(
+      { color },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Color_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });

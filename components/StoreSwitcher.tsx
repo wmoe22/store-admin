@@ -42,8 +42,6 @@ const StoreSwitcher = ({ className, stores = [] }: StoreSwitcherProps) => {
 
   const [open, setOpen] = useState(false);
 
-  console.log(stores);
-
   const formattedStores = stores.map((store) => ({
     label: store.name,
     value: store.id,

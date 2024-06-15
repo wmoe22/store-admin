@@ -45,7 +45,12 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(store);
+    return NextResponse.json(
+      { store },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Store Patch]", error);
     return new NextResponse("Internal server error", { status: 500 });
@@ -73,7 +78,12 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json(store);
+    return NextResponse.json(
+      { store },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[Store Patch]", error);
     return new NextResponse("Internal server error", { status: 500 });

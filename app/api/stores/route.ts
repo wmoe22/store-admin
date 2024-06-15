@@ -38,7 +38,12 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(store);
+    return NextResponse.json(
+      { store },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Store Post", error);
     return new NextResponse("Internal server [stores post] error", {

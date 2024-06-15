@@ -82,7 +82,12 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(
+      { category },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[CATEGORY_PATCH]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -117,7 +122,12 @@ export async function DELETE(
       where: { id: params.categoryId },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(
+      { category },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("[BILLBOARD_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });

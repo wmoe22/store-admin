@@ -27,7 +27,12 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json(
+      { billboard },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Billboard [GET] error", error);
     return new NextResponse("Internal server error", { status: 500 });
@@ -85,7 +90,12 @@ export async function PATCH(
 
     console.log(billboard, "billboard now");
 
-    return NextResponse.json(billboard);
+    return NextResponse.json(
+      { billboard },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Billboard [PATCH] error", error);
     return new NextResponse("Internal server error", { status: 500 });
@@ -121,7 +131,12 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json(
+      { billboard },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Billboard delete", error);
     return new NextResponse("Internal Error", { status: 500 });

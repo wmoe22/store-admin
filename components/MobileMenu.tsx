@@ -20,7 +20,6 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useMediaQuery } from "react-responsive";
 import { ModeToggle } from "./ModeToggle";
 import StoreSwitcher from "./StoreSwitcher";
 import { Button } from "./ui/button";
@@ -50,16 +49,12 @@ const MobileMenu = ({ currentUser }: MobileMenuProps) => {
 
   const [stores, setStores] = useState<Store[]>([]);
 
-  const isTabletOrMobile = useMediaQuery({
-    query: "(max-width: 1224px)",
-  });
-
   useEffect(() => {
     const fetchStores = async () => {
       try {
         const response = await axios.get("/api/getStores");
         if (response.status !== 200) throw new Error("Failed to fetch stores");
-        setStores(response.data);
+        setStores(response.data.stores);
       } catch (error) {
         console.error(error);
       }

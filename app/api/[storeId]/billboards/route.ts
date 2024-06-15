@@ -42,7 +42,12 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json(
+      { billboard },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Billboards [Post] error", error);
     return new NextResponse("Internal server error", { status: 500 });

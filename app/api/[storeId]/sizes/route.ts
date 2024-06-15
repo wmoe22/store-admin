@@ -50,7 +50,12 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(size);
+    return NextResponse.json(
+      { size },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Sizes [Post] error", error);
     return new NextResponse("Internal error", { status: 500 });
@@ -72,7 +77,12 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(sizes);
+    return NextResponse.json(
+      { sizes },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Sizes [Post] error", error);
     return new NextResponse("Internal error", { status: 500 });

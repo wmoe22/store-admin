@@ -50,7 +50,12 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(color);
+    return NextResponse.json(
+      { color },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Colors [Post] error", error);
     return new NextResponse("Internal error", { status: 500 });
@@ -72,7 +77,12 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(colors);
+    return NextResponse.json(
+      { colors },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.log("Colors [Post] error", error);
     return new NextResponse("Internal error", { status: 500 });
