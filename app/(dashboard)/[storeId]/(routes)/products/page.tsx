@@ -12,6 +12,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
     include: {
       category: true,
       size: true,
+      images: true,
       color: true,
     },
     orderBy: {
@@ -19,6 +20,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
     },
   });
 
+  /* @ts-ignore */
   const formattedProducts: ProductColumn[] = products.map((item) => ({
     id: item.id,
     name: item.name,
@@ -27,6 +29,8 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
     price: formatter.format(item.price.toNumber()),
     size: item.size.name,
     color: item.color.value,
+    quantity: item.quantity,
+    images: item.images.map((img) => img.url),
     category: item.category.name,
     createdAt: format(item.createdAt, "MMMM do , yyyy"),
   }));

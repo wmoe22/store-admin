@@ -7,8 +7,8 @@ import {
   Grid2X2,
   Home,
   Layout,
-  LayoutGrid,
   LineChart,
+  Menu,
   Package,
   Palette,
   Percent,
@@ -69,12 +69,12 @@ const MobileMenu = ({ currentUser }: MobileMenuProps) => {
           <div className="flex w-fit fixed right-2 p-4">
             <Button
               className={cn(
-                "xl:hidden  hover:bg-gray-300 dark:bg-gray-500 transition-all px-3 bg-gray-200 rounded-full"
+                "xl:hidden  hover:bg-gray-300 dark:hover:border-white dark:bg-white dark:backdrop-blur-xl transition-all px-3 bg-gray-200 rounded-full"
               )}
               onClick={() => setIsExpended(!isExpended)}
               variant="ghost"
             >
-              <LayoutGrid className="h-5 w-5" />
+              <Menu className="h-5 w-5 dark:text-black" />
             </Button>
           </div>
         </SheetTrigger>

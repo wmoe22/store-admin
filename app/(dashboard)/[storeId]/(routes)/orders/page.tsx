@@ -39,7 +39,7 @@ const OrdersPage = async ({ params }: { params: { storeId: string } }) => {
   }));
   return (
     <>
-      <Orders orders={formattedOrders} />
+      <Orders orders={formattedOrders} storeId={params.storeId} />
     </>
   );
 };

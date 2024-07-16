@@ -21,6 +21,9 @@ export async function POST(req: Request) {
   }
   const session = event.data.object as Stripe.Checkout.Session;
   const address = session?.customer_details?.address;
+  const name = session.customer_details?.name;
+  const email = session.customer_details?.email;
+  const paymentInfo = session.payment_method_collection;
 
   const addressComponents = [
     address?.line1,
@@ -41,6 +44,9 @@ export async function POST(req: Request) {
       data: {
         isPaid: true,
         address: addressString,
+        email: email,
+        customerName: name,
+        paymentInfo,
         phone: session?.customer_details?.phone || "",
       },
       include: {

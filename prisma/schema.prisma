@@ -124,6 +124,8 @@ model Discount {
   products    Product @relation("DiscountToProduct", fields: [productId], references: [id])
   @@index([storeId])
 }
+
+
 model Product {
   id          String    @id @default(uuid())
   storeId     String
@@ -132,6 +134,7 @@ model Product {
   category    Category  @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name        String
   price       Decimal
+  quantity    Int?
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
   sizeId      String
@@ -185,8 +188,10 @@ model Order {
   orderItems OrderItem[]
   isPaid Boolean @default(false)
   phone String @default("")
+  customerName String?
+  email String?
+  paymentInfo String?
   address String @default("")
-  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

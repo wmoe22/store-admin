@@ -61,6 +61,7 @@ const formSchema = z.object({
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
   colorId: z.string().min(1),
+  quantity: z.string().min(1).optional(),
   sizeId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
@@ -79,6 +80,7 @@ const CreateProducts = ({
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
+    /* @ts-ignore */
     defaultValues: initialData
       ? {
           ...initialData,
@@ -90,6 +92,7 @@ const CreateProducts = ({
           price: 0,
           categoryId: "",
           colorId: "",
+          quantity: 0,
           sizeId: "",
           isFeatured: false,
           isArchived: false,
@@ -246,6 +249,25 @@ const CreateProducts = ({
                                   <FormMessage />
                                 </FormItem>
                               )}
+                            />
+                          </div>
+                          <div className="grid gap-3">
+                            <FormField
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Stock</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      disabled={loading}
+                                      placeholder="Put a quantity"
+                                      {...field}
+                                      type="number"
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                              control={form.control}
+                              name="quantity"
                             />
                           </div>
                           <div className="grid gap-3">

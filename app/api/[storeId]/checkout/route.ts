@@ -18,12 +18,13 @@ export async function POST(
   { params }: { params: { storeId: string } }
 ) {
   try {
-    const { productIds } = await req.json();
+    const { productIds, cartItems } = await req.json();
 
     if (!productIds || productIds.length === 0) {
       return new NextResponse("Product ids are required", { status: 400 });
     }
 
+    const item = cartItems.map((item: any) => item);
     const products = await db.product.findMany({
       where: {
         id: {
@@ -36,7 +37,7 @@ export async function POST(
 
     products.forEach((product) => {
       line_items.push({
-        quantity: 1,
+        quantity: item.quantity,
         price_data: {
           currency: "USD",
           product_data: {

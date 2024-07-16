@@ -2,7 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import Link from "next/link";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
@@ -19,11 +18,6 @@ export const columns: ColumnDef<OrderColumn>[] = [
   {
     accessorKey: "id",
     header: "Id",
-    cell: ({ row }) => {
-      return (
-        <Link href={`orders/${row.getValue("id")}`}>{row.getValue("id")}</Link>
-      );
-    },
   },
   {
     accessorKey: "products",
@@ -36,7 +30,7 @@ export const columns: ColumnDef<OrderColumn>[] = [
       return (
         <Badge
           className="capitalize"
-          variant={row.getValue("isPaid") ? "green" : "destructive"}
+          variant={row.getValue("isPaid") ? "default" : "destructive"}
         >
           {row.getValue("isPaid") ? "Paid" : "Unpaid"}
         </Badge>

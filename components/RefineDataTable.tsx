@@ -23,7 +23,7 @@ import {
 import { ChevronDown, File, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs } from "./ui/tabs";
 
 import {
   Card,
@@ -76,6 +76,37 @@ export function RefineDataTable<TData, TValue>({
     },
   });
 
+  /*  <Tabs defaultValue="week">
+              <div className="flex items-center">
+                <TabsList>
+                  <TabsTrigger
+                    value="week"
+                    onClick={() =>
+                      setSorting([{ id: "createdAt", desc: false }])
+                    }
+                  >
+                    Week
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="month"
+                    onClick={() =>
+                      setSorting([{ id: "createdAt", desc: true }])
+                    }
+                  >
+                    Month
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="year"
+                    onClick={() =>
+                      setSorting([{ id: "createdAt", desc: false }])
+                    }
+                  >
+                    Year
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+            </Tabs> */
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-2 sm:py-0 md:gap-8">
       <Tabs defaultValue="all">
@@ -88,16 +119,8 @@ export function RefineDataTable<TData, TValue>({
         </div>
         <div className="flex items-center gap-x-2 py-4">
           {route === "orders" ? (
-            <Tabs defaultValue="week">
-              <div className="flex items-center">
-                <TabsList>
-                  <TabsTrigger value="week">Week</TabsTrigger>
-                  <TabsTrigger value="month">Month</TabsTrigger>
-                  <TabsTrigger value="year">Year</TabsTrigger>
-                </TabsList>
-              </div>
-            </Tabs>
-          ) : (
+            <></>
+          ) : route !== "recent" ? (
             <Input
               placeholder={`Search with ${searchKey}...`}
               value={
@@ -108,54 +131,94 @@ export function RefineDataTable<TData, TValue>({
               }
               className="max-w-sm"
             />
-          )}
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
+          ) : null}{" "}
+          {route !== "recent" ? (
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Columns <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <>
+                          <DropdownMenuCheckboxItem
+                            key={column.id}
+                            className="capitalize"
+                            checked={column.getIsVisible()}
+                            onCheckedChange={(value) =>
+                              column.toggleVisibility(!!value)
+                            }
+                          >
+                            {column.id}
+                          </DropdownMenuCheckboxItem>
+                        </>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button variant="outline" className="ml-auto">
+                    Sort By Status <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuCheckboxItem
+                    onClick={() =>
+                      setSorting([{ id: "isArchived", desc: false }])
+                    }
+                    checked={
+                      sorting.find((s) => s.id === "isArchived" && !s.desc)
+                        ? true
+                        : false
+                    }
+                    className="capitalize items-center justify-center flex flex-col  cursor-pointer p-2"
+                  >
+                    Active
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    onClick={() =>
+                      setSorting([{ id: "isArchived", desc: true }])
+                    }
+                    checked={
+                      sorting.find((s) => s.id === "isArchived" && s.desc)
+                        ? true
+                        : false
+                    }
+                    className="capitalize flex items-center justify-center flex-col cursor-pointer p-2"
+                  >
+                    Inactive
+                  </DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button variant="outline" className="flex gap-1">
+                <File className="h-3.5 w-3.5" />
+                <CSVLink data={data as Data} filename="my_data.csv">
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Export
+                  </span>
+                </CSVLink>
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <>
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    </>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button variant="outline" className="flex gap-1">
-            <File className="h-3.5 w-3.5" />
-            <CSVLink data={data as Data} filename="my_data.csv">
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Export
-              </span>
-            </CSVLink>
-          </Button>
-          {route !== "orders" && (
-            <Link href={`/${params.storeId}/${route}/new`}>
-              <Button className="flex gap-x-1" variant={"outline"}>
-                <PlusCircle className="h-3.5 w-3.5" />
-                <span className="sr-only capitalize sm:not-sr-only sm:whitespace-nowrap">
-                  Add New {route}
-                </span>
-              </Button>
-            </Link>
-          )}
+              {route !== "orders" && (
+                <>
+                  <Link href={`/${params.storeId}/${route}/new`}>
+                    <Button className="flex gap-x-1" variant={"outline"}>
+                      <PlusCircle className="h-3.5 w-3.5" />
+                      <span className="sr-only capitalize sm:not-sr-only sm:whitespace-nowrap">
+                        Add New {route}
+                      </span>
+                    </Button>
+                  </Link>
+                </>
+              )}{" "}
+            </>
+          ) : null}
         </div>
         <TabsContent value="all">
           <Card x-chunk="dashboard-06-chunk-0">
@@ -216,22 +279,26 @@ export function RefineDataTable<TData, TValue>({
               </Table>
             </CardContent>
             <CardFooter className="flex items-end justify-end gap-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                Next
-              </Button>
+              {route !== "recent" ? (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => table.previousPage()}
+                    disabled={!table.getCanPreviousPage()}
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => table.nextPage()}
+                    disabled={!table.getCanNextPage()}
+                  >
+                    Next
+                  </Button>
+                </>
+              ) : null}
             </CardFooter>
           </Card>
         </TabsContent>

@@ -7,7 +7,9 @@ export default function Page() {
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       <div className="h-full lg:flex flex-col items-center justify-center px-4">
         <div className="text-center space-y-4 pt-16">
-          <h1 className="font-bold text-3xl text-gray-700">Welcome Back!</h1>
+          <h1 className="font-bold text-3xl text-black dark:text-white">
+            Welcome Back!
+          </h1>
           <p className="text-base text-gray-400">
             Login or Create account to go to dashboard!
           </p>

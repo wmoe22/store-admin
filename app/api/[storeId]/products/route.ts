@@ -26,6 +26,7 @@ export async function POST(
       categoryId,
       colorId,
       sizeId,
+      quantity,
       images,
       isFeatured,
       isArchived,
@@ -62,6 +63,9 @@ export async function POST(
     if (!params.storeId) {
       return new NextResponse("Store id is required", { status: 400 });
     }
+    if (!quantity) {
+      return new NextResponse("Quantity is required", { status: 400 });
+    }
 
     const storeByUserId = await db.store.findFirst({
       where: {
@@ -79,6 +83,7 @@ export async function POST(
         name,
         price,
         isFeatured,
+        quantity: Number(quantity),
         isArchived,
         categoryId,
         colorId,

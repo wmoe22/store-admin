@@ -105,6 +105,7 @@ export async function PATCH(
       price,
       categoryId,
       images,
+      quantity,
       colorId,
       sizeId,
       isFeatured,
@@ -144,6 +145,9 @@ export async function PATCH(
     if (!sizeId) {
       return new NextResponse("Size id is required", { status: 400 });
     }
+    if (!quantity) {
+      return new NextResponse("Quantity is required", { status: 400 });
+    }
 
     const storeByUserId = await db.store.findFirst({
       where: { id: storeId, userId },
@@ -160,6 +164,7 @@ export async function PATCH(
         name,
         price,
         categoryId,
+        quantity: Number(quantity),
         colorId,
         sizeId,
         isFeatured,
