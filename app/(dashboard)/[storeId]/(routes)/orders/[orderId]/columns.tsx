@@ -4,8 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type OrderColumn = {
-  quantity: number;
-  price: number;
+  products: string[];
+  isPaid: boolean;
+  grandTotal: string;
+  price: string[];
 };
 
 export const columns: ColumnDef<OrderColumn>[] = [

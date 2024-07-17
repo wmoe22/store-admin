@@ -5,20 +5,21 @@ import { Separator } from "@/components/ui/separator";
 import { formatter } from "@/lib/utils";
 import { columns } from "./columns";
 
-const OrderDetails = async ({
-  params,
-  storeId,
-}: {
+interface OrderDetailsProps {
   params: { orderId: string };
   storeId: string;
-}) => {
+}
+
+const OrderDetails = async ({ params, storeId }: OrderDetailsProps) => {
   const orderItems = (
     await getOrderDetails({ storeId, orderId: params.orderId })
   ).map((item) => item.orderItems);
+
   const details = await getOrderDetails({
     storeId,
     orderId: params.orderId,
   });
+
   const products = orderItems[0].map((item) => item.product);
   const amount = formatter.format(
     orderItems[0].reduce((total, item) => {
@@ -34,6 +35,7 @@ const OrderDetails = async ({
     ),
     grandTotal: amount,
   }));
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">

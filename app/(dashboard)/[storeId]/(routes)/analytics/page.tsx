@@ -7,8 +7,8 @@ import { RadarCharComponent } from "@/components/ui/radar-chart";
 import { RadicalChartComponent } from "@/components/ui/radical-chart";
 import { Separator } from "@/components/ui/separator";
 
-const Analytics = async ({ storeId }: { storeId: string }) => {
-  const revenue = await getGraphRevenue(storeId);
+const Analytics = async ({ params }: { params: { storeId: string } }) => {
+  const revenue = await getGraphRevenue(params.storeId);
   console.log(revenue, "revenue");
 
   /* TODO:to look for analytics chars examples */
