@@ -1,12 +1,13 @@
 import db from "@/lib/db";
+
 interface PopularItem {
   productId: string;
   count: number;
 }
-const getPopularItems = async (storeId: string) => {
+const getPopularItems = async (storeId: string, time: number) => {
   const daysAgo = new Date();
   /* 30days ago */
-  daysAgo.setDate(daysAgo.getDate() - 30);
+  daysAgo.setDate(daysAgo.getDate() - time);
 
   const paidOrders = await db.order.findMany({
     where: {

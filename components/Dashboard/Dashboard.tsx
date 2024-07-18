@@ -29,12 +29,12 @@ import {
 } from "@/components/ui/card";
 import db from "@/lib/db";
 import { formatter } from "@/lib/utils";
+import { Product } from "@prisma/client";
 import { format } from "date-fns";
 import DashboardCard from "../DashboardCard";
 import { RefineDataTable } from "../RefineDataTable";
 import { AreaChartComponent } from "../ui/area-chart";
-import { BarChartComponent } from "../ui/bar-chart";
-import { Separator } from "../ui/separator";
+import { PieChartComponent } from "../ui/pie-chart";
 import { columns, OrderColumn } from "./Columns";
 
 export default async function Dashboard({ storeId }: { storeId: string }) {
@@ -42,10 +42,10 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
   const graphRevenue = await getGraphRevenue(storeId);
   const salesCount = await getSalesCount(storeId);
   const stockCount = await getStockCount(storeId);
-  const popularItems = await getPopularItems(storeId);
+  const popularItems = await getPopularItems(storeId, 30);
   const pastStock = await getStockCountForPastPeriod(storeId);
   const pastSales = await getSalesCountForPastPeriod(storeId);
-  const pastRevenue = await getTotalRevenueForPastPeriod(storeId, 30);
+  const monthlyRevenue = await getTotalRevenueForPastPeriod(storeId, 30);
   const recentOrders = await getRecentOrders(storeId);
 
   const formattedOrders: OrderColumn[] = recentOrders.map((item) => ({
@@ -68,31 +68,52 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
   const popularProduct = await db.product.findMany({
     where: {
       storeId,
-
       id: popularItems[0].productId,
     },
     include: {
       images: true,
     },
   });
+  const popularProductForPie = await db.product.findMany({
+    where: {
+      storeId,
+      id: {
+        in: popularItems.map((item) => item.productId),
+      },
+    },
+    include: {
+      images: true,
+    },
+  });
 
-  console.log(popularProduct[0], "popularProduct");
+  console.log(popularProductForPie, "popularProductForPie");
+
+  // Create a mapping of productId to productName
+  const productIdToName: { [key: string]: string } =
+    popularProductForPie.reduce((acc, product: Product) => {
+      acc[product.id] = product.name;
+      return acc;
+    }, {} as { [key: string]: string });
+
+  // Map popularItems to include product names instead of product IDs
+  const popularItemsWithNames = popularItems.map((item) => ({
+    name: productIdToName[item.productId],
+    count: item.count,
+  }));
+
+  /* TODO with Dropdownmenu for all time periods */
+  console.log(popularItemsWithNames, "popularItemsWithNames");
 
   return (
-    <div className="flex min-h-screen pl-0 md:pl-14 lg:pl-14 xl:pl-14 w-full flex-col">
-      <div className="p-7">
-        <h1 className="font-bold text-4xl">Dashboard</h1>
-        <p className="text-lg text-gray-500">Overview of your store</p>
-        <Separator className="mt-7" />
-      </div>
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+    <div className="flex min-h-screen pl-0 md:pl-14 lg:pl-14 xl:pl-[4.2rem] w-full flex-col">
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-4 md:p-4">
+        <div className="grid gap-4 md:grid-cols-2  lg:grid-cols-4">
           <DashboardCard
             content={formatter.format(Number(totalRevenue))}
             Icon={DollarSign}
             title="Total Revenue"
             status={`${formatter.format(
-              Number(pastRevenue.currentRevenue)
+              Number(monthlyRevenue.currentRevenue)
             )} revenue for last 30days period`}
           />
 
@@ -115,7 +136,7 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
             status={` +${pastStock} Stocks for last 30days period`}
           />
         </div>
-        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
           <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
@@ -129,7 +150,7 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
                 </Link>
               </Button>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-4">
               <RefineDataTable
                 columns={columns}
                 data={formattedOrders}
@@ -139,7 +160,10 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
             </CardContent>
           </Card>
           <div className="grid gap-4">
-            <BarChartComponent data={graphRevenue} />
+            <PieChartComponent
+              desc={monthlyRevenue}
+              data={popularItemsWithNames}
+            />
             <AreaChartComponent data={graphRevenue} />
           </div>
         </div>

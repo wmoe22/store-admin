@@ -13,6 +13,26 @@ const getSalesCount = async (storeId: string) => {
 
 export default getSalesCount;
 
+export const getAllSales = async (storeId: string) => {
+  const sales = await db.order.findMany({
+    where: {
+      storeId: storeId,
+    },
+
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      orderItems: {
+        include: {
+          product: true,
+        },
+      },
+    },
+  });
+  return sales;
+};
+
 export const getSalesCountForPastPeriod = async (storeId: string) => {
   const today = new Date();
   const daysAgo = new Date();

@@ -2,7 +2,6 @@
 
 import { TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { UserButton } from "@clerk/nextjs";
 import { Store } from "@prisma/client";
 import axios from "axios";
 import {
@@ -24,7 +23,6 @@ import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ModeToggle } from "../ModeToggle";
 import StoreModal from "../StoreModal";
-import StoreSwitcher from "../StoreSwitcher";
 import { Tooltip } from "../ui/tooltip";
 
 interface SidebarProps {
@@ -75,7 +73,7 @@ const Sidebar = ({ currentUser }: SidebarProps) => {
                 className={cn(
                   "flex h-12 w-12 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
                   pathname === path
-                    ? "bg-blue-100 dark:bg-accent rounded-full p-1 dark:text-white"
+                    ? "bg-blue-100 dark:bg-accent rounded-lg p-1 dark:text-white"
                     : "hover:bg-accent hover:rounded-lg dark:hover:text-white"
                 )}
               >
@@ -88,8 +86,6 @@ const Sidebar = ({ currentUser }: SidebarProps) => {
         ))}
         <ModeToggle />
         <StoreModal />
-        <UserButton afterSignOutUrl="/sign-in" />
-        <StoreSwitcher stores={stores} className="vertical-text" />
       </nav>
       <nav className="flex flex-col items-center px-2 py-0 mb-3">
         <Tooltip>

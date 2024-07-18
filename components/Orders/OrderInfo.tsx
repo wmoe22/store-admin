@@ -10,7 +10,7 @@ const OrderInfo = ({ orders }: { orders: OrderColumn[] }) => {
       <RefineDataTable
         columns={columns}
         data={orders}
-        searchKey={"id"}
+        searchKey={"products"}
         route={"orders"}
       />
     </div>

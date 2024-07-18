@@ -1,6 +1,6 @@
 import db from "@/lib/db";
 
-const getRecentOrders = async (storeId: string, limit: number = 5) => {
+const getRecentOrders = async (storeId: string, limit: number = 7) => {
   const recentOrders = await db.order.findMany({
     where: {
       storeId,

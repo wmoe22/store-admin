@@ -1,26 +1,12 @@
+import { getAllSales } from "@/actions/getSalesCount";
 import { OrderColumn } from "@/components/Orders/Columns";
 import Orders from "@/components/Orders/Orders";
-import db from "@/lib/db";
 import { formatter } from "@/lib/utils";
 import { format } from "date-fns";
 
+/* TODo Sort with input */
 const OrdersPage = async ({ params }: { params: { storeId: string } }) => {
-  const orders = await db.order.findMany({
-    where: {
-      storeId: params.storeId,
-    },
-
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      orderItems: {
-        include: {
-          product: true,
-        },
-      },
-    },
-  });
+  const orders = await getAllSales(params.storeId);
 
   const formattedOrders: OrderColumn[] = orders.map((item) => ({
     id: item.id,

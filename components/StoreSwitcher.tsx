@@ -2,9 +2,9 @@ import { useStoreModal } from "@/hooks/use-store-modal";
 import { cn } from "@/lib/utils";
 import { Store } from "@prisma/client";
 import {
-  ArrowRightFromLine,
   ArrowUpDown,
   Check,
+  ChevronsUpDown,
   PlusCircle,
   Store as StoreIcon,
 } from "lucide-react";
@@ -62,22 +62,22 @@ const StoreSwitcher = ({ className, stores = [] }: StoreSwitcherProps) => {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         asChild
-        className="flex p-0 gap-y-2 flex-row gap-x-10 py-2 sm:flex-col"
+        className="flex p-0 gap-y-2 bg-transparent flex-row gap-x-4 px-4 py-2 "
       >
         <Button
-          variant={"outline"}
           size={"sm"}
+          variant="outline"
           role="combobox"
           aria-expanded={open}
           aria-label="Select a store"
-          className={cn(" h-fit w-full sm:w-[40px] sm:px-1.5 sm:py-3")}
+          className={cn(" h-fit  w-full")}
         >
-          <StoreIcon className="h-50 w-50" />
+          <StoreIcon className="h-45 w-45" />{" "}
           <p className={className}> {currentStore?.label}</p>
           {isTabletOrMobile ? (
             <ArrowUpDown className="w-4 h-4 shrink-0" />
           ) : (
-            <ArrowRightFromLine className=" w-4 h-4 shrink-0" />
+            <ChevronsUpDown className=" w-4 h-4 shrink-0" />
           )}
         </Button>
       </PopoverTrigger>

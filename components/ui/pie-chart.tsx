@@ -1,6 +1,6 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import { TreeDeciduous, TrendingDown, TrendingUp } from "lucide-react";
 import { Pie, PieChart } from "recharts";
 
 import {
@@ -12,18 +12,41 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { Badge } from "./badge";
+
+/* random fill for random items */
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
 const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
+  { browser: "chrome", count: 275, fill: "var(--color-chrome)" },
+  { browser: "safari", count: 200, fill: "var(--color-safari)" },
+  { browser: "firefox", count: 187, fill: "var(--color-firefox)" },
+  { browser: "edge", count: 173, fill: "var(--color-edge)" },
+  { browser: "other", count: 90, fill: "var(--color-other)" },
 ];
+
+const color = [
+  "var(--color-chrome)",
+  "var(--color-safari)",
+  "var(--color-firefox)",
+  "var(--color-edge)",
+  "var(--color-other)",
+];
+
+const randomColorIndex = Math.floor(Math.random() * color.length);
+
+const randomColor = color[randomColorIndex];
 
 const chartConfig = {
   visitors: {
@@ -49,9 +72,44 @@ const chartConfig = {
     label: "Other",
     color: "hsl(var(--chart-5))",
   },
-} satisfies ChartConfig;
+};
 
-export function PieChartComponent({ data }: { data: any }) {
+interface ProductData {
+  name: string;
+  count: number;
+}
+
+interface ChartData {
+  name: string;
+  count: number;
+  fill: string;
+}
+
+const generateChartData = (data: ProductData[]): ChartData[] => {
+  const colors = [
+    "var(--color-chrome)",
+    "var(--color-safari)",
+    "var(--color-firefox)",
+    "var(--color-edge)",
+    "var(--color-other)",
+  ];
+
+  return data.map((item, index) => ({
+    name: item.name,
+    count: item.count,
+    fill: colors[index % colors.length],
+  }));
+};
+
+interface PieChartProps {
+  data: any;
+  desc: { currentRevenue: any; previousRevenue: any; percentageChange: number };
+}
+
+export function PieChartComponent({ data, desc }: PieChartProps) {
+  const chartData = generateChartData(data);
+  console.log(chartData);
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
@@ -65,13 +123,34 @@ export function PieChartComponent({ data }: { data: any }) {
         >
           <PieChart>
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            <Pie data={chartData} dataKey="visitors" label nameKey="browser" />
+            <Pie data={chartData} dataKey="count" label nameKey="name" />
           </PieChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          {desc.percentageChange < 0 ? (
+            <Badge variant={"down"} className="flex w-fit gap-x-1">
+              Trending down by
+              <TrendingDown className="w-4 h-4" />
+              {desc.percentageChange}%
+            </Badge>
+          ) : desc.percentageChange > 0 ? (
+            <Badge variant="green" className="flex w-fit gap-x-1">
+              Trending up by
+              <TrendingUp className="w-4 h-4" />
+              {desc.percentageChange}%
+            </Badge>
+          ) : (
+            <>
+              Trending stable by
+              <Badge variant="low" className="flex w-fit gap-x-1">
+                <TreeDeciduous className="w-4 h-4" />
+                {desc.percentageChange}%
+              </Badge>
+            </>
+          )}
+          this month
         </div>
         <div className="leading-none text-muted-foreground">
           Showing total visitors for the last 6 months

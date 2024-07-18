@@ -1,7 +1,8 @@
 "use client";
 
 import { Record } from "@prisma/client/runtime/library";
-import { Copy, Server } from "lucide-react";
+import { Check, Copy, Server } from "lucide-react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 import { Badge, BadgeProps } from "./badge";
@@ -28,9 +29,12 @@ export const ApiAlert: React.FC<ApiAlertProps> = ({
   description,
   variant = "public",
 }) => {
+  const [copied, setCopied] = useState(false);
   const onCopy = (description: string) => {
+    setCopied(true);
     navigator.clipboard.writeText(description);
     toast.success("Api Route copied to the clipboard!");
+    setTimeout(() => setCopied(false), 2000);
   };
   return (
     <Alert>
@@ -48,7 +52,11 @@ export const ApiAlert: React.FC<ApiAlertProps> = ({
           size={"icon"}
           onClick={() => onCopy(description)}
         >
-          <Copy className="w-4 h-4" />
+          {copied ? (
+            <Check className="w-4 h-4" />
+          ) : (
+            <Copy className="w-4 h-4" />
+          )}
         </Button>
       </AlertDescription>
     </Alert>

@@ -44,6 +44,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { CSVLink } from "react-csv";
 import { Data } from "react-csv/lib/core";
+import toast from "react-hot-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -58,6 +59,7 @@ export function RefineDataTable<TData, TValue>({
   route,
   searchKey,
 }: DataTableProps<TData, TValue>) {
+  const [loading, setLoading] = useState(false);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const params = useParams();
@@ -119,7 +121,18 @@ export function RefineDataTable<TData, TValue>({
         </div>
         <div className="flex items-center gap-x-2 py-4">
           {route === "orders" ? (
-            <></>
+            <>
+              <Input
+                placeholder={`Search with ${searchKey}...`}
+                value={
+                  (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event) =>
+                  table.getColumn(searchKey)?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+            </>
           ) : route !== "recent" ? (
             <Input
               placeholder={`Search with ${searchKey}...`}
@@ -162,45 +175,87 @@ export function RefineDataTable<TData, TValue>({
                     })}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button variant="outline" className="ml-auto">
-                    Sort By Status <ChevronDown className="ml-2 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuCheckboxItem
-                    onClick={() =>
-                      setSorting([{ id: "isArchived", desc: false }])
-                    }
-                    checked={
-                      sorting.find((s) => s.id === "isArchived" && !s.desc)
-                        ? true
-                        : false
-                    }
-                    className="capitalize items-center justify-center flex flex-col  cursor-pointer p-2"
-                  >
-                    Active
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    onClick={() =>
-                      setSorting([{ id: "isArchived", desc: true }])
-                    }
-                    checked={
-                      sorting.find((s) => s.id === "isArchived" && s.desc)
-                        ? true
-                        : false
-                    }
-                    className="capitalize flex items-center justify-center flex-col cursor-pointer p-2"
-                  >
-                    Inactive
-                  </DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {route === "products" && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button variant="outline" className="ml-auto">
+                      Sort By Status <ChevronDown className="ml-2 h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuCheckboxItem
+                      onClick={() =>
+                        setSorting([{ id: "isArchived", desc: false }])
+                      }
+                      checked={
+                        sorting.find((s) => s.id === "isArchived" && !s.desc)
+                          ? true
+                          : false
+                      }
+                      className="capitalize items-center justify-center flex flex-col  cursor-pointer p-2"
+                    >
+                      Active
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      onClick={() =>
+                        setSorting([{ id: "isArchived", desc: true }])
+                      }
+                      checked={
+                        sorting.find((s) => s.id === "isArchived" && s.desc)
+                          ? true
+                          : false
+                      }
+                      className="capitalize flex items-center justify-center flex-col cursor-pointer p-2"
+                    >
+                      Inactive
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+              {route === "orders" && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button variant="outline" className="ml-auto">
+                      Sort By Status <ChevronDown className="ml-2 h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuCheckboxItem
+                      onClick={() => setSorting([{ id: "isPaid", desc: true }])}
+                      checked={
+                        sorting.find((s) => s.id === "isPaid" && s.desc)
+                          ? true
+                          : false
+                      }
+                      className="capitalize items-center justify-center flex flex-col  cursor-pointer p-2"
+                    >
+                      Paid
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      onClick={() =>
+                        setSorting([{ id: "isPaid", desc: false }])
+                      }
+                      checked={
+                        sorting.find((s) => s.id === "isPaid" && !s.desc)
+                          ? true
+                          : false
+                      }
+                      className="capitalize flex items-center justify-center flex-col cursor-pointer p-2"
+                    >
+                      UnPaid
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
               <Button variant="outline" className="flex gap-1">
                 <File className="h-3.5 w-3.5" />
                 <CSVLink data={data as Data} filename="my_data.csv">
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                  <span
+                    onClick={() => {
+                      toast.success("Exporting...");
+                    }}
+                    className="sr-only sm:not-sr-only sm:whitespace-nowrap"
+                  >
                     Export
                   </span>
                 </CSVLink>

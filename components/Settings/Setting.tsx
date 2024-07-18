@@ -96,14 +96,7 @@ export function Settings({ initialData }: SettingsFormProps) {
         loading={loading}
       />
       <div className="flex min-h-screen w-full flex-col">
-        <main className="flex min-h-screen flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-          <div className="flex items-center flex-col gap-y-10 justify-start">
-            <div className="mx-auto grid w-full max-w-6xl gap-2">
-              <h1 className="font-bold text-4xl">Settings</h1>
-              <p className="text-lg text-gray-500">Overview of store boards</p>
-              <Separator />
-            </div>
-          </div>
+        <main className="flex min-h-screen flex-1 flex-col gap-4 bg-transparent p-4 md:gap-8 md:p-10">
           <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-1 lg:grid-cols-1">
             <div className="grid gap-6">
               <Card x-chunk="dashboard-04-chunk-1">

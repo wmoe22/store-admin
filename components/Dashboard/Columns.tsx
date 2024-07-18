@@ -30,7 +30,7 @@ export const columns: ColumnDef<OrderColumn>[] = [
       return (
         <Badge
           className="capitalize"
-          variant={row.getValue("isPaid") ? "default" : "destructive"}
+          variant={row.getValue("isPaid") ? "green" : "destructive"}
         >
           {row.getValue("isPaid") ? "Paid" : "Unpaid"}
         </Badge>
@@ -56,7 +56,9 @@ export const columns: ColumnDef<OrderColumn>[] = [
     accessorKey: "amount",
     header: "Amount",
     cell: ({ row }) => (
-      <Badge className="capitalize">{row.getValue("amount")}</Badge>
+      <Badge className="capitalize" variant={"green"}>
+        {row.getValue("amount")}
+      </Badge>
     ),
   },
 ];

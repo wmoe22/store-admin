@@ -33,6 +33,7 @@ const ImageUpload = ({
             <div className="z-10 absolute top-2 right-2">
               <Button
                 type="button"
+                disabled={disabled}
                 onClick={() => onRemove(url)}
                 variant={"destructive"}
                 size={"sm"}

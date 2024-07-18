@@ -15,8 +15,8 @@ const ApiList = ({ entityId, entityName }: ApiListProps) => {
 
   const baseUrl = `${origin}/api/${params.storeId}`;
   return (
-    <div className="flex flex-col gap-4 ">
-      <div>
+    <div className="flex flex-col gap-4 px-2  ">
+      <div className="flex flex-col gap-4  ">
         <ApiAlert
           description={`${baseUrl}/${entityName}`}
           title="GET"
