@@ -47,7 +47,7 @@ const StoreSwitcher = ({ className, stores = [] }: StoreSwitcherProps) => {
     value: store.id,
   }));
 
-  console.log(formattedStores);
+  console.log(formattedStores, "formattedStores");
 
   const currentStore = formattedStores.find(
     (store) => store.value === params.storeId
@@ -58,6 +58,7 @@ const StoreSwitcher = ({ className, stores = [] }: StoreSwitcherProps) => {
     setOpen(false);
     router.push(`/${store.value}`);
   };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger

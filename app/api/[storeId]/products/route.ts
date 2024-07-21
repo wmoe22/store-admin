@@ -26,8 +26,10 @@ export async function POST(
       categoryId,
       colorId,
       sizeId,
+      brandId,
       quantity,
       images,
+      description,
       isFeatured,
       isArchived,
     } = body;
@@ -66,6 +68,12 @@ export async function POST(
     if (!quantity) {
       return new NextResponse("Quantity is required", { status: 400 });
     }
+    if (!brandId) {
+      return new NextResponse("Brand id is required", { status: 400 });
+    }
+    if (!description) {
+      return new NextResponse("Description is required", { status: 400 });
+    }
 
     const storeByUserId = await db.store.findFirst({
       where: {
@@ -86,8 +94,10 @@ export async function POST(
         quantity: Number(quantity),
         isArchived,
         categoryId,
+        description,
         colorId,
         sizeId,
+        brandId,
         storeId: params.storeId,
         images: {
           createMany: {
@@ -118,6 +128,7 @@ export async function GET(
     const categoryId = searchParams.get("categoryId") || undefined;
     const colorId = searchParams.get("colorId") || undefined;
     const sizeId = searchParams.get("sizeId") || undefined;
+    const brandId = searchParams.get("brandId") || undefined;
     const isFeatured = searchParams.get("isFeatured");
 
     if (!params.storeId) {
@@ -130,6 +141,7 @@ export async function GET(
         categoryId,
         colorId,
         sizeId,
+        brandId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
       },
@@ -137,6 +149,7 @@ export async function GET(
         images: true,
         category: true,
         color: true,
+        brand: true,
         size: true,
       },
       orderBy: {

@@ -6,7 +6,6 @@ import { Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -103,18 +102,22 @@ const generateChartData = (data: ProductData[]): ChartData[] => {
 
 interface PieChartProps {
   data: any;
-  desc: { currentRevenue: any; previousRevenue: any; percentageChange: number };
+  desc: string;
+  percentage: {
+    currentRevenue: any;
+    previousRevenue: any;
+    percentageChange: number;
+  };
 }
 
-export function PieChartComponent({ data, desc }: PieChartProps) {
+export function PieChartComponent({ data, percentage, desc }: PieChartProps) {
   const chartData = generateChartData(data);
   console.log(chartData);
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
+    <Card className="flex  flex-col">
+      <CardHeader className="items-center pb-4">
         <CardTitle>Pie Chart - Label</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -129,32 +132,29 @@ export function PieChartComponent({ data, desc }: PieChartProps) {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          {desc.percentageChange < 0 ? (
+          {percentage.percentageChange < 0 ? (
             <Badge variant={"down"} className="flex w-fit gap-x-1">
               Trending down by
               <TrendingDown className="w-4 h-4" />
-              {desc.percentageChange}%
+              {percentage.percentageChange}%
             </Badge>
-          ) : desc.percentageChange > 0 ? (
+          ) : percentage.percentageChange > 0 ? (
             <Badge variant="green" className="flex w-fit gap-x-1">
               Trending up by
               <TrendingUp className="w-4 h-4" />
-              {desc.percentageChange}%
+              {percentage.percentageChange}%
             </Badge>
           ) : (
             <>
               Trending stable by
               <Badge variant="low" className="flex w-fit gap-x-1">
                 <TreeDeciduous className="w-4 h-4" />
-                {desc.percentageChange}%
+                {percentage.percentageChange}%
               </Badge>
             </>
           )}
-          this month
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
+        <div className="leading-none text-muted-foreground">{desc}</div>
       </CardFooter>
     </Card>
   );

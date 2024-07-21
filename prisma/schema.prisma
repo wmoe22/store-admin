@@ -102,6 +102,7 @@ model Brand {
   store Store @relation("StoreToBrand",fields: [storeId],references: [id])
   name String
   logo String
+  products Product[] 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -134,6 +135,7 @@ model Product {
   category    Category  @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name        String
   price       Decimal
+  description String?
   quantity    Int?
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
@@ -144,8 +146,11 @@ model Product {
   images      Image[]
   orderItems  OrderItem[]
   discounts   Discount[] @relation("DiscountToProduct")
+  brandId     String
+  brand       Brand @relation(fields: [brandId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+ 
 
   @@index([storeId])
   @@index([categoryId])

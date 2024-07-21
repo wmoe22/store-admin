@@ -1,6 +1,6 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import { TreeDeciduous, TrendingDown, TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import {
@@ -17,6 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { Badge } from "./badge";
 const chartData = [
   { month: "January", total: 186 },
   { month: "February", total: 305 },
@@ -39,14 +40,24 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function AreaChartComponent({ data }: { data: any }) {
+export function AreaChartComponent({
+  data,
+  percentage,
+  desc,
+}: {
+  data: any;
+  percentage: {
+    currentRevenue: any;
+    previousRevenue: any;
+    percentageChange: number;
+  };
+  desc: string;
+}) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Area Chart</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
+        <CardDescription>{desc}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -84,10 +95,27 @@ export function AreaChartComponent({ data }: { data: any }) {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              {percentage.percentageChange < 0 ? (
+                <Badge variant={"down"} className="flex w-fit gap-x-1">
+                  Trending down by
+                  <TrendingDown className="w-4 h-4" />
+                  {percentage.percentageChange}%
+                </Badge>
+              ) : percentage.percentageChange > 0 ? (
+                <Badge variant="green" className="flex w-fit gap-x-1">
+                  Trending up by
+                  <TrendingUp className="w-4 h-4" />
+                  {percentage.percentageChange}%
+                </Badge>
+              ) : (
+                <>
+                  Trending stable by
+                  <Badge variant="low" className="flex w-fit gap-x-1">
+                    <TreeDeciduous className="w-4 h-4" />
+                    {percentage.percentageChange}%
+                  </Badge>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -14,6 +14,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
       size: true,
       images: true,
       color: true,
+      brand: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -30,6 +31,7 @@ const ProductsPage = async ({ params }: { params: { storeId: string } }) => {
     size: item.size.name,
     color: item.color.value,
     quantity: item.quantity,
+    brand: item.brand.name,
     images: item.images.map((img) => img.url),
     category: item.category.name,
     createdAt: format(item.createdAt, "MMMM do , yyyy"),

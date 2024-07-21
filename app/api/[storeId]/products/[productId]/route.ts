@@ -30,6 +30,7 @@ export async function GET(
         category: true,
         size: true,
         color: true,
+        brand: true,
       },
     });
 
@@ -107,7 +108,9 @@ export async function PATCH(
       images,
       quantity,
       colorId,
+      brandId,
       sizeId,
+      description,
       isFeatured,
       isArchived,
     } = body;
@@ -148,6 +151,12 @@ export async function PATCH(
     if (!quantity) {
       return new NextResponse("Quantity is required", { status: 400 });
     }
+    if (!brandId) {
+      return new NextResponse("Brand id is required", { status: 400 });
+    }
+    if (!description) {
+      return new NextResponse("Description is required", { status: 400 });
+    }
 
     const storeByUserId = await db.store.findFirst({
       where: { id: storeId, userId },
@@ -164,8 +173,10 @@ export async function PATCH(
         name,
         price,
         categoryId,
+        description,
         quantity: Number(quantity),
         colorId,
+        brandId,
         sizeId,
         isFeatured,
         isArchived,

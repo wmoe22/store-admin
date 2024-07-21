@@ -23,6 +23,7 @@ import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ModeToggle } from "../ModeToggle";
 import StoreModal from "../StoreModal";
+import { Separator } from "../ui/separator";
 import { Tooltip } from "../ui/tooltip";
 
 interface SidebarProps {
@@ -37,11 +38,11 @@ const Sidebar = ({ currentUser }: SidebarProps) => {
     { name: "Dashboard", path: `/${storeId}`, icon: Home },
     { name: "Billboard", path: `/${storeId}/billboards`, icon: Layout },
     { name: "Orders", path: `/${storeId}/orders`, icon: ShoppingBag },
-    { name: "Products", path: `/${storeId}/products`, icon: Package },
     { name: "Categories", path: `/${storeId}/categories`, icon: Grid2X2 },
     { name: "Colors", path: `/${storeId}/colors`, icon: Palette },
     { name: "Sizes", path: `/${storeId}/sizes`, icon: Ruler },
     { name: "Brand", path: `/${storeId}/brands`, icon: Tag },
+    { name: "Products", path: `/${storeId}/products`, icon: Package },
     { name: "Discount", path: `/${storeId}/discounts`, icon: Percent },
     { name: "Customers", path: `/${storeId}/customers`, icon: User2 },
     { name: "Analytics", path: `/${storeId}/analytics`, icon: LineChart },
@@ -86,8 +87,9 @@ const Sidebar = ({ currentUser }: SidebarProps) => {
         ))}
         <ModeToggle />
         <StoreModal />
+        <Separator />
       </nav>
-      <nav className="flex flex-col items-center px-2 py-0 mb-3">
+      <nav className="flex flex-col items-center mt-auto px-2 py-3 mb-3">
         <Tooltip>
           <TooltipTrigger asChild>
             <Link

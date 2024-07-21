@@ -16,6 +16,7 @@ export type ProductColumn = {
   quantity: number;
   category: string;
   images: string;
+  brand: string;
   isFeatured: boolean;
   isArchived: boolean;
   createdAt: string;
@@ -41,7 +42,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
       );
     },
   },
-  { accessorKey: "id", header: "Id" },
+  {
+    accessorKey: "brand",
+    header: "Brand",
+  },
   {
     accessorKey: "name",
     header: "Name",
@@ -102,6 +106,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
       );
     },
   },
+
   {
     accessorKey: "quantity",
     header: ({ column }) => {

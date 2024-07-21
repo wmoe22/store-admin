@@ -78,7 +78,7 @@ const CreateColors = ({ initialData }: ColorFormProps) => {
       setLoading(false);
     }
   };
-
+  /* TODO color picker */
   return (
     <>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -155,8 +155,9 @@ const CreateColors = ({ initialData }: ColorFormProps) => {
                                       <div className="flex items-center gap-x-4 ">
                                         <Input
                                           disabled={loading}
-                                          placeholder="Color value"
+                                          placeholder="Put a hex color code"
                                           {...field}
+                                          type="color"
                                         />
                                         <div
                                           className="border p-4 rounded-full"

@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Brand,
   Category,
   Color,
   Image as Images,
@@ -53,6 +54,7 @@ interface ProductFormProps {
   categories: Category[];
   colors: Color[];
   sizes: Size[];
+  brands: Brand[];
 }
 
 const formSchema = z.object({
@@ -61,7 +63,9 @@ const formSchema = z.object({
   price: z.coerce.number().min(1),
   categoryId: z.string().min(1),
   colorId: z.string().min(1),
-  quantity: z.string().min(1).optional(),
+  brandId: z.string().min(1),
+  description: z.string().min(1).optional(),
+  quantity: z.coerce.number().optional(),
   sizeId: z.string().min(1),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
@@ -73,6 +77,7 @@ const CreateProducts = ({
   categories,
   colors,
   sizes,
+  brands,
 }: ProductFormProps) => {
   const params = useParams();
   const router = useRouter();
@@ -94,6 +99,8 @@ const CreateProducts = ({
           colorId: "",
           quantity: 0,
           sizeId: "",
+          description: "",
+          brandId: "",
           isFeatured: false,
           isArchived: false,
         },
@@ -126,12 +133,19 @@ const CreateProducts = ({
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <div className="flex min-h-screen w-full flex-col bg-transparent">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <div className="grid  flex-1 auto-rows-max gap-4">
             <div className="flex items-center gap-4">
-              <Button variant="outline" size="icon" className="h-7 w-7">
+              <Button
+                onClick={() => {
+                  router.push(`/${params.storeId}/products/`);
+                }}
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+              >
                 <ChevronLeft className="h-4 w-4" />
                 <span className="sr-only">Back</span>
               </Button>
@@ -202,6 +216,25 @@ const CreateProducts = ({
                               )}
                               control={form.control}
                               name="price"
+                            />
+                          </div>
+                          <div className="grid gap-3">
+                            <FormField
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Description</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      disabled={loading}
+                                      placeholder="Product Description"
+                                      {...field}
+                                      type="text"
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                              control={form.control}
+                              name="description"
                             />
                           </div>
                         </div>
@@ -296,8 +329,48 @@ const CreateProducts = ({
                                         <SelectItem
                                           key={color.id}
                                           value={color.id}
+                                          style={{
+                                            backgroundColor: color.value,
+                                          }}
                                         >
                                           {color.name}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="grid gap-3">
+                            <FormField
+                              control={form.control}
+                              name="brandId"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Brand</FormLabel>
+                                  <Select
+                                    disabled={loading}
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                    defaultValue={field.value}
+                                  >
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue
+                                          defaultValue={field.value}
+                                          placeholder="Select a brand name"
+                                        />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      {brands.map((brand) => (
+                                        <SelectItem
+                                          key={brand.id}
+                                          value={brand.id}
+                                        >
+                                          {brand.name}
                                         </SelectItem>
                                       ))}
                                     </SelectContent>

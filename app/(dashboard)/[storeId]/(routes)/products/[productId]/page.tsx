@@ -30,6 +30,11 @@ const ProductPage = async ({
       storeId: params.storeId,
     },
   });
+  const brands = await db.brand.findMany({
+    where: {
+      storeId: params.storeId,
+    },
+  });
 
   return (
     <div>
@@ -37,6 +42,7 @@ const ProductPage = async ({
         categories={categories}
         colors={colors}
         sizes={sizes}
+        brands={brands}
         initialData={product}
       />
     </div>
