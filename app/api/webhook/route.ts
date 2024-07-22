@@ -5,7 +5,10 @@ import db from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(
+  req: Request,
+  { params }: { params: { storeId: string } }
+) {
   const body = await req.text();
   const signature = headers().get("Stripe-Signature") as string;
   let event: Stripe.Event;
@@ -55,6 +58,15 @@ export async function POST(req: Request) {
     });
     const productIds = order.orderItems.map((orderItem) => orderItem.productId);
 
+    await db.customer.create({
+      data: {
+        storeId: params.storeId,
+        name: session?.customer_details?.name || "",
+        phone: session?.customer_details?.phone || "",
+        email: session?.customer_details?.email || "",
+        address: addressString,
+      },
+    });
     await db.product.updateMany({
       where: {
         id: {
