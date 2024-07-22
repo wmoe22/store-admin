@@ -4,7 +4,6 @@ import Orders from "@/components/Orders/Orders";
 import { formatter } from "@/lib/utils";
 import { format } from "date-fns";
 
-/* TODo Sort with input */
 const OrdersPage = async ({ params }: { params: { storeId: string } }) => {
   const orders = await getAllSales(params.storeId);
 

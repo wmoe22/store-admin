@@ -6,7 +6,6 @@ import { OrderColumn, columns } from "./Columns";
 const OrderInfo = ({ orders }: { orders: OrderColumn[] }) => {
   return (
     <div>
-      {/* TODO:week/month/year */}
       <RefineDataTable
         columns={columns}
         data={orders}

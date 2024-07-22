@@ -2,7 +2,6 @@ import CategoriesInfo from "@/components/Categories/CategoriesInfo";
 import { CategoryColumn } from "./Columns";
 
 const Categories = ({ categories }: { categories: CategoryColumn[] }) => {
-  /* TODO to fix styles */
   return (
     <>
       <div className="flex min-h-screen w-full flex-col bg-transparent">

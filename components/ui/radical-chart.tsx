@@ -1,7 +1,6 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { RadialBar, RadialBarChart } from "recharts";
+import { LabelList, RadialBar, RadialBarChart } from "recharts";
 
 import {
   Card,
@@ -17,13 +16,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
-];
+import PercentageBadge from "../pecentageBadge";
+import { ChartData, ProductData } from "./pie-chart";
 
 const chartConfig = {
   visitors: {
@@ -51,33 +45,77 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function RadicalChartComponent({ data }: { data: any }) {
+interface RadialChartProps {
+  data: any;
+  desc: string;
+  percentage: number;
+}
+
+export const generateChartData = (data: ProductData[]): ChartData[] => {
+  const colors = [
+    "var(--color-chrome)",
+    "var(--color-safari)",
+    "var(--color-firefox)",
+    "var(--color-edge)",
+    "var(--color-other)",
+  ];
+
+  return data.map((item, index) => ({
+    name: item.name,
+    count: item.count,
+    fill: colors[index % colors.length],
+  }));
+};
+
+export function RadicalChartComponent({
+  data,
+  percentage,
+  desc,
+}: RadialChartProps) {
+  const chartData = generateChartData(data);
+
+  console.log("chartData", chartData);
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Radial Chart</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Radial Chart - Label</CardTitle>
+        <CardDescription>{desc}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
         >
-          <RadialBarChart data={chartData} innerRadius={30} outerRadius={110}>
+          <RadialBarChart
+            data={chartData}
+            startAngle={-90}
+            endAngle={380}
+            innerRadius={30}
+            outerRadius={110}
+          >
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel nameKey="browser" />}
+              content={<ChartTooltipContent hideLabel nameKey="name" />}
             />
-            <RadialBar dataKey="visitors" background />
+            <RadialBar dataKey="count" background>
+              <LabelList
+                position="insideStart"
+                dataKey="name"
+                className="fill-white capitalize mix-blend-luminosity"
+                fontSize={11}
+              />
+            </RadialBar>
           </RadialBarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+      <CardFooter>
+        <div className="flex w-full items-start gap-2 text-sm">
+          <div className="grid gap-2">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              <PercentageBadge percentageChange={percentage} />
+            </div>
+          </div>
         </div>
       </CardFooter>
     </Card>

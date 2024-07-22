@@ -148,9 +148,7 @@ export async function PATCH(
     if (!sizeId) {
       return new NextResponse("Size id is required", { status: 400 });
     }
-    if (!quantity) {
-      return new NextResponse("Quantity is required", { status: 400 });
-    }
+
     if (!brandId) {
       return new NextResponse("Brand id is required", { status: 400 });
     }

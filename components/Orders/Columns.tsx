@@ -43,7 +43,6 @@ export const columns: ColumnDef<OrderColumn>[] = [
       );
     },
   },
-  /* TODO:week/month/year */
   {
     accessorKey: "createdAt",
     header: ({ column }) => {
@@ -62,7 +61,9 @@ export const columns: ColumnDef<OrderColumn>[] = [
     accessorKey: "amount",
     header: "Amount",
     cell: ({ row }) => (
-      <Badge className="capitalize">{row.getValue("amount")}</Badge>
+      <Badge className="capitalize" variant={"green"}>
+        {row.getValue("amount")}
+      </Badge>
     ),
   },
 ];

@@ -164,6 +164,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                         <div className="grid gap-6">
                           <div className="grid gap-3">
                             <FormField
+                              disabled={loading}
                               control={form.control}
                               name="name"
                               render={({ field }) => (
@@ -185,6 +186,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                             <FormField
                               control={form.control}
                               name="percentage"
+                              disabled={loading}
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel>Percentage</FormLabel>
@@ -214,6 +216,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                             <FormField
                               control={form.control}
                               name="productId"
+                              disabled={loading}
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel>Product</FormLabel>
@@ -262,6 +265,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                             <FormField
                               control={form.control}
                               name="startDate"
+                              disabled={loading}
                               render={({ field }) => (
                                 <FormItem>
                                   <Popover>
@@ -312,6 +316,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                         <FormField
                           control={form.control}
                           name="isArchived"
+                          disabled={loading}
                           render={({ field }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4">
                               <FormControl>
@@ -344,6 +349,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                             <FormField
                               control={form.control}
                               name="endDate"
+                              disabled={loading}
                               render={({ field }) => (
                                 <FormItem>
                                   <Popover>

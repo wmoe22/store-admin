@@ -329,11 +329,15 @@ const CreateProducts = ({
                                         <SelectItem
                                           key={color.id}
                                           value={color.id}
-                                          style={{
-                                            backgroundColor: color.value,
-                                          }}
+                                          className="mix-blend-difference"
                                         >
                                           {color.name}
+
+                                          <div
+                                            style={{
+                                              backgroundColor: color.value,
+                                            }}
+                                          />
                                         </SelectItem>
                                       ))}
                                     </SelectContent>
@@ -431,6 +435,7 @@ const CreateProducts = ({
                           <FormField
                             control={form.control}
                             name="isFeatured"
+                            disabled={loading}
                             render={({ field }) => (
                               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>
@@ -453,6 +458,7 @@ const CreateProducts = ({
                           <FormField
                             control={form.control}
                             name="isArchived"
+                            disabled={loading}
                             render={({ field }) => (
                               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>

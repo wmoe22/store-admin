@@ -78,7 +78,6 @@ const CreateColors = ({ initialData }: ColorFormProps) => {
       setLoading(false);
     }
   };
-  /* TODO color picker */
   return (
     <>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">

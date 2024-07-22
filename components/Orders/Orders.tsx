@@ -7,13 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { formatter } from "@/lib/utils";
-import {
-  ArrowRight,
-  TreeDeciduous,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
-import { Badge } from "../ui/badge";
+import PercentageBadge from "../pecentageBadge";
 import { OrderColumn } from "./Columns";
 import OrderInfo from "./OrderInfo";
 
@@ -52,24 +46,14 @@ async function Orders({
                     </CardTitle>
                   </CardHeader>
                   <CardFooter>
-                    <div className="text-xs flex items-center  gap-x-2  text-muted-foreground">
-                      {weeklyRevenue.percentageChange < 0 ? (
-                        <Badge variant={"down"} className="flex w-fit gap-x-1">
-                          <TrendingDown className="w-4 h-4" />
-                          {weeklyRevenue.percentageChange}%
-                        </Badge>
-                      ) : weeklyRevenue.percentageChange > 0 ? (
-                        <Badge variant="green" className="flex w-fit gap-x-1">
-                          <TrendingUp className="w-4 h-4" />
-                          {weeklyRevenue.percentageChange}%
-                        </Badge>
-                      ) : (
-                        <Badge variant="low" className="flex w-fit gap-x-1">
-                          <TreeDeciduous className="w-4 h-4" />
-                          {weeklyRevenue.percentageChange}%
-                        </Badge>
-                      )}
-                      from last week
+                    <div className="flex w-full items-start gap-2 text-sm">
+                      <div className="grid gap-2">
+                        <div className="flex items-center gap-2 font-medium leading-none">
+                          <PercentageBadge
+                            percentageChange={weeklyRevenue.percentageChange}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </CardFooter>
                 </Card>
@@ -82,28 +66,17 @@ async function Orders({
                     </CardTitle>
                   </CardHeader>
                   <CardFooter>
-                    <div className="text-xs flex items-center  gap-x-2  text-muted-foreground">
-                      {monthlyRevenue.percentageChange < 0 ? (
-                        <Badge variant={"down"} className="flex w-fit gap-x-1">
-                          <TrendingDown className="w-4 h-4" />
-                          {monthlyRevenue.percentageChange}%
-                        </Badge>
-                      ) : monthlyRevenue.percentageChange > 0 ? (
-                        <Badge variant="green" className="flex w-fit gap-x-1">
-                          <TrendingUp className="w-4 h-4" />
-                          {monthlyRevenue.percentageChange}%
-                        </Badge>
-                      ) : (
-                        <Badge variant="low" className="flex w-fit gap-x-1">
-                          <ArrowRight className="w-4 h-4" />
-                          {monthlyRevenue.percentageChange}%
-                        </Badge>
-                      )}
-                      from last month
+                    <div className="flex w-full items-start gap-2 text-sm">
+                      <div className="grid gap-2">
+                        <div className="flex items-center gap-2 font-medium leading-none">
+                          <PercentageBadge
+                            percentageChange={monthlyRevenue.percentageChange}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </CardFooter>
                 </Card>
-                {/*    <CalendarForm /> */}
               </div>
               <OrderInfo orders={orders} />
             </div>

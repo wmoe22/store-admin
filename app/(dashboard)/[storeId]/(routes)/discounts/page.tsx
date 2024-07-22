@@ -16,14 +16,25 @@ const DiscountPage = async ({ params }: { params: { storeId: string } }) => {
     },
   });
 
-  const product = discounts.map((item) => item.name);
+  const productIds = discounts.map((item) => item.productId);
+
+  const products = await db.product.findMany({
+    where: {
+      id: {
+        in: productIds,
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   const formattedDiscounts: DiscountColumn[] = discounts.map((item) => ({
     id: item.id,
     name: item.name,
     percentage: item.percentage,
     endDate: format(item.endDate, "MMMM do, yyyy"),
-    product: product,
+    product: products.map((item) => item.name),
     isArchived: item.isArchived,
     startDate: format(item.startDate, "MMMM do, yyyy"),
     createdAt: format(item.createdAt, "MMMM do, yyyy"),

@@ -29,7 +29,6 @@ export const columns: ColumnDef<OrderColumn>[] = [
       );
     },
   },
-  /* TODO:week/month/year */
   {
     accessorKey: "price",
     header: "Unit Price",

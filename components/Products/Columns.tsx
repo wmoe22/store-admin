@@ -22,7 +22,6 @@ export type ProductColumn = {
   createdAt: string;
 };
 
-/* TODO calendar sort and status sort */
 export const columns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: "images",
@@ -63,7 +62,13 @@ export const columns: ColumnDef<ProductColumn>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => (
+      <Badge className="capitalize" variant={"green"}>
+        {row.getValue("price")}
+      </Badge>
+    ),
   },
+
   {
     accessorKey: "color",
     header: "Color",

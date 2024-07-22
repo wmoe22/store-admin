@@ -37,7 +37,6 @@ export const columns: ColumnDef<OrderColumn>[] = [
       );
     },
   },
-  /* TODO:week/month/year */
   {
     accessorKey: "createdAt",
     header: ({ column }) => {

@@ -13,8 +13,10 @@ import getRecentOrders from "@/actions/getRecentOrders";
 import getSalesCount, {
   getSalesCountForPastPeriod,
 } from "@/actions/getSalesCount";
-import getStockCount, {
-  getStockCountForPastPeriod,
+import getVarietyCount, {
+  getStockCount,
+  getStockCountForTimePeriod,
+  getVarietyCountForTimePeriod,
 } from "@/actions/getStockCount";
 import getTotalRevenue, {
   getTotalRevenueForPastPeriod,
@@ -35,6 +37,7 @@ import DashboardCard from "../DashboardCard";
 import { RefineDataTable } from "../RefineDataTable";
 import { AreaChartComponent } from "../ui/area-chart";
 import { PieChartComponent } from "../ui/pie-chart";
+import { Skeleton } from "../ui/skeleton";
 import { columns, OrderColumn } from "./Columns";
 
 export default async function Dashboard({ storeId }: { storeId: string }) {
@@ -42,12 +45,15 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
     const totalRevenue = await getTotalRevenue(storeId);
     const graphRevenue = await getGraphRevenue(storeId);
     const salesCount = await getSalesCount(storeId);
-    const stockCount = await getStockCount(storeId);
+    const variety = await getVarietyCount(storeId);
     const popularItems = await getPopularItems(storeId, 30);
-    const pastStock = await getStockCountForPastPeriod(storeId);
-    const pastSales = await getSalesCountForPastPeriod(storeId);
+    const varietyCount = await getVarietyCountForTimePeriod(storeId);
+    const pastSales = await getSalesCountForPastPeriod(storeId, 30);
     const monthlyRevenue = await getTotalRevenueForPastPeriod(storeId, 30);
     const recentOrders = await getRecentOrders(storeId);
+    const stockCount = await getStockCount(storeId);
+
+    const stockCountForTimePeriod = await getStockCountForTimePeriod(storeId);
 
     if (!recentOrders || !popularItems) {
       console.error("Failed to fetch data");
@@ -110,10 +116,12 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
       count: item.count,
     }));
 
+    console.log(pastSales, "pastSales");
+
     return (
       <div className="flex min-h-screen pl-0 md:pl-14 lg:pl-14 xl:pl-[4.2rem] w-full flex-col">
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-4 md:p-4">
-          <div className="grid gap-4 md:grid-cols-2  lg:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <DashboardCard
               content={formatter.format(Number(totalRevenue))}
               Icon={DollarSign}
@@ -127,7 +135,7 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
               content={salesCount}
               Icon={CreditCard}
               title="Sales"
-              status={`+${pastSales} sales for last 30days period`}
+              status={`+${pastSales.salesCountCurrent} sales for last 30days period`}
             />
             <DashboardCard
               content={
@@ -142,12 +150,19 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
               }`}
             />
             <DashboardCard
+              content={variety}
+              Icon={Database}
+              title="Variety of products"
+              status={` +${varietyCount} variety for last 30days period`}
+            />
+            <DashboardCard
               content={stockCount}
               Icon={Database}
-              title="Stocks"
-              status={` +${pastStock} Stocks for last 30days period`}
+              title="Available stocks"
+              status={` +${stockCountForTimePeriod} stocks for last 30days period`}
             />
           </div>
+
           <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
             <Card className="xl:col-span-2 " x-chunk="dashboard-01-chunk-4">
               <CardHeader className="flex  flex-row items-center">
@@ -175,7 +190,7 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
             </Card>
             <div className="grid gap-4 ">
               <PieChartComponent
-                percentage={monthlyRevenue}
+                percentage={pastSales.percentageChangeSalesCount}
                 data={popularItemsWithNames || null}
                 desc={"Showing total sales count for the last month"}
               />
@@ -194,3 +209,14 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
     return <div>Error loading dashboard data. Please try again later.</div>;
   }
 }
+
+export const DashboardSkeleton = () => {
+  return (
+    <div className="grid gap-4 md:grid-cols-2  lg:grid-cols-4">
+      <Skeleton className="w-[21.5rem] h-[8rem]" />
+      <Skeleton className="w-[21.5rem] h-[8rem]" />
+      <Skeleton className="w-[21.5rem] h-[8rem]" />
+      <Skeleton className="w-[21.5rem] h-[8rem]" />
+    </div>
+  );
+};

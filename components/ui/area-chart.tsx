@@ -1,6 +1,5 @@
 "use client";
 
-import { TreeDeciduous, TrendingDown, TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import {
@@ -17,7 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Badge } from "./badge";
+import PercentageBadge from "../pecentageBadge";
 const chartData = [
   { month: "January", total: 186 },
   { month: "February", total: 305 },
@@ -95,27 +94,7 @@ export function AreaChartComponent({
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              {percentage.percentageChange < 0 ? (
-                <Badge variant={"down"} className="flex w-fit gap-x-1">
-                  Trending down by
-                  <TrendingDown className="w-4 h-4" />
-                  {percentage.percentageChange}%
-                </Badge>
-              ) : percentage.percentageChange > 0 ? (
-                <Badge variant="green" className="flex w-fit gap-x-1">
-                  Trending up by
-                  <TrendingUp className="w-4 h-4" />
-                  {percentage.percentageChange}%
-                </Badge>
-              ) : (
-                <>
-                  Trending stable by
-                  <Badge variant="low" className="flex w-fit gap-x-1">
-                    <TreeDeciduous className="w-4 h-4" />
-                    {percentage.percentageChange}%
-                  </Badge>
-                </>
-              )}
+              <PercentageBadge percentageChange={percentage.percentageChange} />
             </div>
           </div>
         </div>

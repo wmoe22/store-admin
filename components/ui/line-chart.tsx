@@ -1,6 +1,5 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import {
@@ -17,6 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import PercentageBadge from "../pecentageBadge";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
@@ -39,12 +39,24 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function LineChartComponent({ data }: { data: any }) {
+export function LineChartComponent({
+  data,
+  percentage,
+  desc,
+}: {
+  data: any;
+  percentage: {
+    currentRevenue: any;
+    previousRevenue: any;
+    percentageChange: number;
+  };
+  desc: string;
+}) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Line Chart</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>{desc}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -78,12 +90,13 @@ export function LineChartComponent({ data }: { data: any }) {
           </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+      <CardFooter>
+        <div className="flex w-full items-start gap-2 text-sm">
+          <div className="grid gap-2">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              <PercentageBadge percentageChange={percentage.percentageChange} />
+            </div>
+          </div>
         </div>
       </CardFooter>
     </Card>

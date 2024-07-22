@@ -101,7 +101,7 @@ const calculateTotalRevenue = (paidOrders: any[]) => {
   }, 0);
 };
 
-const calculatePercentageChange = (
+export const calculatePercentageChange = (
   currentValue: number,
   previousValue: number
 ) => {
@@ -111,5 +111,5 @@ const calculatePercentageChange = (
 
   const percentageChange =
     ((currentValue - previousValue) / previousValue) * 100;
-  return percentageChange;
+  return parseFloat(percentageChange.toFixed(2));
 };

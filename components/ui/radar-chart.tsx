@@ -1,6 +1,5 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
@@ -17,6 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import PercentageBadge from "../pecentageBadge";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
@@ -39,14 +39,26 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function RadarCharComponent({ data }: { data: any }) {
+interface RadarChartProps {
+  data: any;
+  desc: string;
+  percentage: {
+    currentRevenue: any;
+    previousRevenue: any;
+    percentageChange: number;
+  };
+}
+
+export function RadarCharComponent({
+  data,
+  percentage,
+  desc,
+}: RadarChartProps) {
   return (
     <Card>
       <CardHeader className="items-center">
         <CardTitle>Radar Chart - Dots</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
+        <CardDescription>{desc}</CardDescription>
       </CardHeader>
       <CardContent className="pb-0">
         <ChartContainer
@@ -69,12 +81,13 @@ export function RadarCharComponent({ data }: { data: any }) {
           </RadarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="flex items-center gap-2 leading-none text-muted-foreground">
-          January - June 2024
+      <CardFooter>
+        <div className="flex w-full items-start gap-2 text-sm">
+          <div className="grid gap-2">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              <PercentageBadge percentageChange={percentage.percentageChange} />
+            </div>
+          </div>
         </div>
       </CardFooter>
     </Card>
