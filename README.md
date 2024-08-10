@@ -1,6 +1,6 @@
 # Admin Dashboard - An E-commerce Admin Dashboard
 
-Built with Next.Js, React, Tailwind, Shadcn Ui, TypeScript, Prisma, Stripe and Zustand
+Built with Next.Js, React, Tailwind, Shadcn Ui, TypeScript, Prisma
 
 ## Features
 - Intuitive Design: Ensures easy navigation.
