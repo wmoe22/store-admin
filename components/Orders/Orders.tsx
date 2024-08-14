@@ -21,6 +21,7 @@ async function Orders({
   const weeklyRevenue = await getTotalRevenueForPastPeriod(storeId, 7);
   const monthlyRevenue = await getTotalRevenueForPastPeriod(storeId, 30);
 
+  /* TODO:Sort By Status Filter with an icon */
   return (
     <>
       <div className="flex min-h-screen bg-transparent w-full flex-col ">

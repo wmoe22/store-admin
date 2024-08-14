@@ -1,15 +1,12 @@
 "use client";
 
 import { Billboard } from "@prisma/client";
-import { useParams } from "next/navigation";
 import { RefineDataTable } from "../RefineDataTable";
 import ApiList from "../ui/api-list";
 import { Separator } from "../ui/separator";
 import { columns } from "./Columns";
 
 const BillboardsInfo = ({ billboards }: { billboards: Billboard[] }) => {
-  const params = useParams();
-
   const formattedBillboards = billboards.map((billboard) => ({
     ...billboard,
     createdAt: billboard.createdAt.toDateString(),

@@ -12,14 +12,13 @@ import db from "@/lib/db";
 import { Product } from "@prisma/client";
 
 const Analytics = async ({ params }: { params: { storeId: string } }) => {
-  const revenue = await getGraphRevenue(params.storeId);
-  const monthlyRevenue = await getTotalRevenueForPastPeriod(
-    params.storeId,
-    182
-  );
-  const pastSales = await getSalesCountForPastPeriod(params.storeId, 182);
+  const [revenue, monthlyRevenue, pastSales, popularItems] = await Promise.all([
+    getGraphRevenue(params.storeId),
+    getTotalRevenueForPastPeriod(params.storeId, 182),
+    getSalesCountForPastPeriod(params.storeId, 182),
+    getPopularItems(params.storeId, 365),
+  ]);
 
-  const popularItems = await getPopularItems(params.storeId, 365);
   const popularProductForPie = await db.product.findMany({
     where: {
       storeId: params.storeId,

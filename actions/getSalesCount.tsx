@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import { calculatePercentageChange } from "./getTotalRevenue";
+import { calculatePercentageChange } from "@/lib/utils";
 
 const getSalesCount = async (storeId: string) => {
   const salesCount = await db.order.count({
