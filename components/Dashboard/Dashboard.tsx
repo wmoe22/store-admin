@@ -140,9 +140,9 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
 
     return (
       <>
-        <div className="flex min-h-screen pl-0 md:pl-14 lg:pl-14 xl:pl-[4.2rem] w-full flex-col">
+        <div className="flex min-h-screen pl-0 md:pl-14 lg:pl-14 xl:pl-[4.2rem] w-screen flex-col">
           <main className="flex flex-1 flex-col gap-4 p-4 md:gap-4 md:p-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2 grid-cols-1 lg:grid-cols-3">
               <DashboardCard
                 content={formatter.format(Number(totalRevenue))}
                 Icon={DollarSign}
@@ -184,7 +184,7 @@ export default async function Dashboard({ storeId }: { storeId: string }) {
               />
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-4 lg:grid-cols-1 xl:grid-cols-3">
               <Card className="xl:col-span-2 " x-chunk="dashboard-01-chunk-4">
                 <CardHeader className="flex  flex-row items-center">
                   <div className="grid  gap-2">

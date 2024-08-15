@@ -1,9 +1,7 @@
 import ClientOnly from "@/components/ClientOnly";
-import MobileMenu from "@/components/MobileMenu";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { SocketProvider } from "@/lib/providers/socket-provider";
 import ToasterProvider from "@/lib/providers/toast-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
@@ -30,16 +28,13 @@ export default async function RootLayout({
       <body className={font.className}>
         <ClerkProvider>
           <ThemeProvider attribute="class" defaultTheme="system">
-            <SocketProvider>
-              <ClientOnly>
-                <TooltipProvider>
-                  <Sidebar currentUser={currentUser} />
-                  <MobileMenu currentUser={currentUser} />
-                  <ToasterProvider />
-                  {children}
-                </TooltipProvider>
-              </ClientOnly>
-            </SocketProvider>
+            <ClientOnly>
+              <TooltipProvider>
+                <Sidebar currentUser={currentUser} />
+                <ToasterProvider />
+                {children}
+              </TooltipProvider>
+            </ClientOnly>
           </ThemeProvider>
         </ClerkProvider>
       </body>

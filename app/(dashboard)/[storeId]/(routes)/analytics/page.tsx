@@ -47,7 +47,7 @@ const Analytics = async ({ params }: { params: { storeId: string } }) => {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-transparent">
-      <div className=" grid grid-cols-2 flex-col sm:gap-4 sm:py-4 sm:pl-20 sm:pr-3">
+      <div className=" grid grid-cols-1 sm:grid-cols-2 flex-col sm:gap-4 sm:py-4 sm:pl-20 sm:pr-3">
         <AreaChartComponent
           data={revenue}
           desc={`Showing total revenue for the last 6 months

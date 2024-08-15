@@ -1,3 +1,4 @@
+import getCurrentUser from "@/actions/getCurrentUser";
 import Navbar from "@/components/Navbar";
 import db from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
@@ -18,6 +19,7 @@ export default async function DashboardLayout({
   const store = await db.store.findFirst({
     where: { id: params.storeId, userId },
   });
+  const currentUser = await getCurrentUser();
 
   if (!store) {
     redirect("/");
@@ -25,8 +27,7 @@ export default async function DashboardLayout({
 
   return (
     <div>
-      <Navbar storeId={params.storeId} />
-
+      <Navbar storeId={params.storeId} currentUser={currentUser} />
       {children}
     </div>
   );

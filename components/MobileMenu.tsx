@@ -21,7 +21,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ModeToggle } from "./ModeToggle";
-import StoreSwitcher from "./StoreSwitcher";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
@@ -66,10 +65,10 @@ const MobileMenu = ({ currentUser }: MobileMenuProps) => {
     <nav>
       <Sheet>
         <SheetTrigger asChild>
-          <div className="flex w-fit fixed right-2 p-4">
+          <div className="flex w-fit  p-4">
             <Button
               className={cn(
-                "xl:hidden  hover:bg-gray-300 dark:hover:border-white dark:bg-white dark:backdrop-blur-xl transition-all px-3 bg-gray-200 rounded-full"
+                "flex hover:bg-gray-300 dark:hover:border-white dark:bg-white dark:backdrop-blur-xl transition-all px-3 bg-gray-200 rounded-full"
               )}
               onClick={() => setIsExpended(!isExpended)}
               variant="ghost"
@@ -78,7 +77,7 @@ const MobileMenu = ({ currentUser }: MobileMenuProps) => {
             </Button>
           </div>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className="overflow-auto">
           <div className="flex items-center justify-start px-3.5">
             <UserButton afterSignOutUrl="/sign-in" />
             <ModeToggle />
@@ -95,9 +94,6 @@ const MobileMenu = ({ currentUser }: MobileMenuProps) => {
                 </Link>
               </li>
             ))}
-            <div className="flex items-center flex-col">
-              <StoreSwitcher stores={stores} />
-            </div>
           </ul>
         </SheetContent>
       </Sheet>

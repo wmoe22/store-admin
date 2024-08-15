@@ -6,10 +6,17 @@ import { Store } from "@prisma/client";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import MobileMenu from "./MobileMenu";
 import StoreSwitcher from "./StoreSwitcher";
 import { Separator } from "./ui/separator";
 
-const Navbar = ({ storeId }: { storeId: string }) => {
+const Navbar = ({
+  storeId,
+  currentUser,
+}: {
+  storeId: string;
+  currentUser: any;
+}) => {
   const [stores, setStores] = useState<Store[]>([]);
   const [stocks, setStocks] = useState<number[]>([]);
   const pathname = usePathname();
@@ -46,18 +53,21 @@ const Navbar = ({ storeId }: { storeId: string }) => {
 
   return (
     <>
-      <div className="px-10 py-4 flex justify-between">
+      <div className="px-10 py-4 w-screen flex   items-center justify-between ">
         <div className="flex flex-col pl-14">
           <h1 className="font-bold text-4xl capitalize">
             {storeId !== lastSegment ? lastSegment : "Dashboard"}
           </h1>
-          <p className="text-base text-muted-foreground">
-            Overview of the {storeId !== lastSegment ? lastSegment : "store"}
-          </p>
         </div>
-        <div className="flex gap-x-4 items-center">
-          <StoreSwitcher stores={stores} />
-          <UserButton afterSignOutUrl="/sign-in" />
+        <div className="flex gap-x-4 items-center justify-between">
+          <div className="sm:flex gap-4 hidden items-center">
+            <StoreSwitcher stores={stores} />
+            <UserButton afterSignOutUrl="/sign-in" />
+          </div>
+          <div className="sm:hidden flex items-center">
+            <StoreSwitcher stores={stores} />
+            <MobileMenu currentUser={currentUser} />
+          </div>
         </div>
       </div>
       <Separator />
