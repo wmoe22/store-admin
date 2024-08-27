@@ -59,7 +59,6 @@ export function RefineDataTable<TData, TValue>({
   route,
   searchKey,
 }: DataTableProps<TData, TValue>) {
-  const [loading, setLoading] = useState(false);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const params = useParams();

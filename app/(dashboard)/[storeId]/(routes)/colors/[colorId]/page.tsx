@@ -9,9 +9,9 @@ const ColorPage = async ({ params }: { params: { colorId: string } }) => {
   });
 
   return (
-    <div>
+    <>
       <CreateColors initialData={color} />
-    </div>
+    </>
   );
 };
 

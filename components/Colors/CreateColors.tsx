@@ -9,11 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useLoadingModal } from "@/hooks/use-loading";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Color } from "@prisma/client";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -43,7 +43,7 @@ type ColorFormValues = z.infer<typeof formSchema>;
 const CreateColors = ({ initialData }: ColorFormProps) => {
   const params = useParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { isLoading, onLoad, onUnLoad } = useLoadingModal();
 
   const toastMessage = initialData ? "Color updated" : "Color created";
   const button = initialData ? "Update Color" : "Create Color";
@@ -60,7 +60,7 @@ const CreateColors = ({ initialData }: ColorFormProps) => {
 
   const onSubmit = async (data: ColorFormValues) => {
     try {
-      setLoading(true);
+      onLoad();
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/colors/${params.colorId}`,
@@ -75,7 +75,7 @@ const CreateColors = ({ initialData }: ColorFormProps) => {
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
-      setLoading(false);
+      onUnLoad();
     }
   };
   return (
@@ -99,7 +99,7 @@ const CreateColors = ({ initialData }: ColorFormProps) => {
                 <div className="hidden items-center gap-2 md:ml-auto md:flex">
                   <Button
                     size="sm"
-                    disabled={loading}
+                    disabled={isLoading}
                     form="color-form"
                     type="submit"
                   >
@@ -133,7 +133,7 @@ const CreateColors = ({ initialData }: ColorFormProps) => {
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                       <Input
-                                        disabled={loading}
+                                        disabled={isLoading}
                                         placeholder="Color name"
                                         {...field}
                                       />
@@ -153,7 +153,7 @@ const CreateColors = ({ initialData }: ColorFormProps) => {
                                     <FormControl>
                                       <div className="flex items-center gap-x-4 ">
                                         <Input
-                                          disabled={loading}
+                                          disabled={isLoading}
                                           placeholder="Put a hex color code"
                                           {...field}
                                           type="color"
@@ -177,7 +177,7 @@ const CreateColors = ({ initialData }: ColorFormProps) => {
                     </div>
                   </div>
                   <div className="flex items-center justify-center gap-2 md:hidden">
-                    <Button size="sm" type="submit" disabled={loading}>
+                    <Button size="sm" type="submit" disabled={isLoading}>
                       {button}
                     </Button>
                   </div>

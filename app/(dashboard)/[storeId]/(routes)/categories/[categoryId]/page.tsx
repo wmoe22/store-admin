@@ -18,9 +18,9 @@ const CategoryPage = async ({
     },
   });
   return (
-    <div>
+    <>
       <CreateCategories initialData={category} billboards={billboards} />
-    </div>
+    </>
   );
 };
 

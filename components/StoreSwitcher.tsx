@@ -35,12 +35,11 @@ const StoreSwitcher = ({ className, stores = [] }: StoreSwitcherProps) => {
   const params = useParams();
   const router = useRouter();
   const storeModal = useStoreModal();
+  const [open, setOpen] = useState(false);
 
   const isTabletOrMobile = useMediaQuery({
     query: "(max-width: 1224px)",
   });
-
-  const [open, setOpen] = useState(false);
 
   const formattedStores = stores.map((store) => ({
     label: store.name,

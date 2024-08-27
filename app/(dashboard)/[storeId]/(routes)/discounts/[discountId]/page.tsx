@@ -21,9 +21,9 @@ const DiscountPage = async ({
   console.log(discount, "discount");
 
   return (
-    <div>
+    <>
       <CreateDiscounts initialData={discount} products={products} />
-    </div>
+    </>
   );
 };
 

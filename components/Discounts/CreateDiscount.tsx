@@ -15,6 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useLoadingModal } from "@/hooks/use-loading";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Discount, Product } from "@prisma/client";
@@ -22,7 +23,6 @@ import axios from "axios";
 import { format, parseISO } from "date-fns";
 import { Calendar as CalendarIcon, ChevronLeft } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import * as React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -66,7 +66,7 @@ type DiscountFormValues = z.infer<typeof formSchema>;
 const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
   const params = useParams();
   const router = useRouter();
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const { isLoading, onLoad, onUnLoad } = useLoadingModal();
 
   const initialValues = initialData
     ? {
@@ -95,7 +95,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
   const onSubmit = async (data: DiscountFormValues) => {
     console.log("Submitting form...", data);
     try {
-      setLoading(true);
+      onLoad();
       if (initialData) {
         console.log("hello");
         await axios.patch(
@@ -112,7 +112,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
-      setLoading(false);
+      onUnLoad();
     }
   };
 
@@ -136,7 +136,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
               </h1>
               <div className="hidden items-center gap-2 md:ml-auto md:flex">
                 <Button
-                  disabled={loading}
+                  disabled={isLoading}
                   form="discount-form"
                   size="sm"
                   type="submit"
@@ -164,7 +164,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                         <div className="grid gap-6">
                           <div className="grid gap-3">
                             <FormField
-                              disabled={loading}
+                              disabled={isLoading}
                               control={form.control}
                               name="name"
                               render={({ field }) => (
@@ -172,7 +172,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                                   <FormLabel>Name</FormLabel>
                                   <FormControl>
                                     <Input
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       placeholder="Discount name"
                                       {...field}
                                     />
@@ -186,14 +186,14 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                             <FormField
                               control={form.control}
                               name="percentage"
-                              disabled={loading}
+                              disabled={isLoading}
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel>Percentage</FormLabel>
                                   <FormControl>
                                     <Input
                                       type="number"
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       placeholder="0.2"
                                       {...field}
                                     />
@@ -216,12 +216,12 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                             <FormField
                               control={form.control}
                               name="productId"
-                              disabled={loading}
+                              disabled={isLoading}
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel>Product</FormLabel>
                                   <Select
-                                    disabled={loading}
+                                    disabled={isLoading}
                                     onValueChange={field.onChange}
                                     value={field.value}
                                     defaultValue={field.value}
@@ -265,7 +265,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                             <FormField
                               control={form.control}
                               name="startDate"
-                              disabled={loading}
+                              disabled={isLoading}
                               render={({ field }) => (
                                 <FormItem>
                                   <Popover>
@@ -316,7 +316,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                         <FormField
                           control={form.control}
                           name="isArchived"
-                          disabled={loading}
+                          disabled={isLoading}
                           render={({ field }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4">
                               <FormControl>
@@ -349,7 +349,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                             <FormField
                               control={form.control}
                               name="endDate"
-                              disabled={loading}
+                              disabled={isLoading}
                               render={({ field }) => (
                                 <FormItem>
                                   <Popover>
@@ -398,7 +398,7 @@ const CreateDiscounts = ({ initialData, products }: DiscountProps) => {
                   <Button variant="outline" size="sm">
                     Discard
                   </Button>
-                  <Button size="sm" type="submit" disabled={loading}>
+                  <Button size="sm" type="submit" disabled={isLoading}>
                     {button}
                   </Button>
                 </div>

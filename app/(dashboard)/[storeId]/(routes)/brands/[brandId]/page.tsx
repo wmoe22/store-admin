@@ -8,9 +8,9 @@ const BrandPage = async ({ params }: { params: { brandId: string } }) => {
     },
   });
   return (
-    <div>
+    <>
       <CreateBrands initialData={brand} />
-    </div>
+    </>
   );
 };
 

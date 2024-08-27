@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useLoadingModal } from "@/hooks/use-loading";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Brand,
@@ -29,7 +30,6 @@ import {
 } from "@prisma/client";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
@@ -81,7 +81,7 @@ const CreateProducts = ({
 }: ProductFormProps) => {
   const params = useParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { isLoading, onLoad, onUnLoad } = useLoadingModal();
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
@@ -113,7 +113,7 @@ const CreateProducts = ({
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
-      setLoading(true);
+      onLoad();
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/products/${params.productId}`,
@@ -128,7 +128,7 @@ const CreateProducts = ({
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
-      setLoading(false);
+      onUnLoad();
     }
   };
 
@@ -156,7 +156,7 @@ const CreateProducts = ({
               <div className="hidden items-center gap-2 md:ml-auto md:flex">
                 <Button
                   size="sm"
-                  disabled={loading}
+                  disabled={isLoading}
                   form="product-form"
                   type="submit"
                 >
@@ -188,7 +188,7 @@ const CreateProducts = ({
                                   <FormLabel>Name</FormLabel>
                                   <FormControl>
                                     <Input
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       placeholder="Product Name"
                                       {...field}
                                     />
@@ -206,7 +206,7 @@ const CreateProducts = ({
                                   <FormLabel>Price</FormLabel>
                                   <FormControl>
                                     <Input
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       placeholder="Product Price"
                                       {...field}
                                       type="number"
@@ -225,7 +225,7 @@ const CreateProducts = ({
                                   <FormLabel>Description</FormLabel>
                                   <FormControl>
                                     <Input
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       placeholder="Product Description"
                                       {...field}
                                       type="text"
@@ -255,7 +255,7 @@ const CreateProducts = ({
                                 <FormItem>
                                   <FormLabel>Category</FormLabel>
                                   <Select
-                                    disabled={loading}
+                                    disabled={isLoading}
                                     onValueChange={field.onChange}
                                     value={field.value}
                                     defaultValue={field.value}
@@ -291,7 +291,7 @@ const CreateProducts = ({
                                   <FormLabel>Stock</FormLabel>
                                   <FormControl>
                                     <Input
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       placeholder="Put a quantity"
                                       {...field}
                                       type="number"
@@ -311,7 +311,7 @@ const CreateProducts = ({
                                 <FormItem>
                                   <FormLabel>Color</FormLabel>
                                   <Select
-                                    disabled={loading}
+                                    disabled={isLoading}
                                     onValueChange={field.onChange}
                                     value={field.value}
                                     defaultValue={field.value}
@@ -355,7 +355,7 @@ const CreateProducts = ({
                                 <FormItem>
                                   <FormLabel>Brand</FormLabel>
                                   <Select
-                                    disabled={loading}
+                                    disabled={isLoading}
                                     onValueChange={field.onChange}
                                     value={field.value}
                                     defaultValue={field.value}
@@ -392,7 +392,7 @@ const CreateProducts = ({
                                 <FormItem>
                                   <FormLabel>Size</FormLabel>
                                   <Select
-                                    disabled={loading}
+                                    disabled={isLoading}
                                     onValueChange={field.onChange}
                                     value={field.value}
                                     defaultValue={field.value}
@@ -435,7 +435,7 @@ const CreateProducts = ({
                           <FormField
                             control={form.control}
                             name="isFeatured"
-                            disabled={loading}
+                            disabled={isLoading}
                             render={({ field }) => (
                               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>
@@ -458,7 +458,7 @@ const CreateProducts = ({
                           <FormField
                             control={form.control}
                             name="isArchived"
-                            disabled={loading}
+                            disabled={isLoading}
                             render={({ field }) => (
                               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                 <FormControl>
@@ -506,7 +506,7 @@ const CreateProducts = ({
                                     value={field.value.map(
                                       (image) => image.url
                                     )}
-                                    disabled={loading}
+                                    disabled={isLoading}
                                     onChange={(url) =>
                                       field.onChange([...field.value, { url }])
                                     }
@@ -530,7 +530,7 @@ const CreateProducts = ({
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-2 md:hidden">
-                  <Button size="sm" type="submit" disabled={loading}>
+                  <Button size="sm" type="submit" disabled={isLoading}>
                     {button}
                   </Button>
                 </div>

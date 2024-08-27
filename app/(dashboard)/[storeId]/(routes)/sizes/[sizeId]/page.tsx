@@ -9,9 +9,9 @@ const SizePage = async ({ params }: { params: { sizeId: string } }) => {
   });
 
   return (
-    <div>
+    <>
       <CreateSizes initialData={size} />
-    </div>
+    </>
   );
 };
 

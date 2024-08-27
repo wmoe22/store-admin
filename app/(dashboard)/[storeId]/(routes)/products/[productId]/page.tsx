@@ -37,7 +37,7 @@ const ProductPage = async ({
   });
 
   return (
-    <div>
+    <>
       <CreateProducts
         categories={categories}
         colors={colors}
@@ -45,7 +45,7 @@ const ProductPage = async ({
         brands={brands}
         initialData={product}
       />
-    </div>
+    </>
   );
 };
 

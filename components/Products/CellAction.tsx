@@ -8,10 +8,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLoadingModal } from "@/hooks/use-loading";
 import axios from "axios";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import { ProductColumn } from "./Columns";
 
@@ -22,7 +22,7 @@ interface CellActionProps {
 const CellAction = ({ data }: CellActionProps) => {
   const params = useParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { isLoading, onLoad, onUnLoad } = useLoadingModal();
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -31,7 +31,7 @@ const CellAction = ({ data }: CellActionProps) => {
 
   const onDelete = async (id: string) => {
     try {
-      setLoading(true);
+      onLoad();
       await axios.delete(`/api/${params.storeId}/products/${data.id}`);
       router.refresh();
       toast.success("Billboard deleted.");
@@ -40,7 +40,7 @@ const CellAction = ({ data }: CellActionProps) => {
         "Make sure you removed all categories using this billboard first."
       );
     } finally {
-      setLoading(false);
+      onUnLoad();
     }
   };
 
@@ -60,7 +60,7 @@ const CellAction = ({ data }: CellActionProps) => {
             CopyId
           </DropdownMenuItem>
           <DropdownMenuItem
-            disabled={loading}
+            disabled={isLoading}
             onClick={() =>
               router.push(`/${params.storeId}/products/${data.id}`)
             }
@@ -69,7 +69,7 @@ const CellAction = ({ data }: CellActionProps) => {
             Update
           </DropdownMenuItem>
           <DropdownMenuItem
-            disabled={loading}
+            disabled={isLoading}
             onClick={() => onDelete(data.id)}
           >
             <Trash className="w-4 h-4 mr-2" />

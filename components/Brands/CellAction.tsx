@@ -8,6 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLoadingModal } from "@/hooks/use-loading";
 import axios from "axios";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -23,7 +24,7 @@ interface CellActionProps {
 const CellAction = ({ data }: CellActionProps) => {
   const params = useParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { isLoading, onLoad, onUnLoad } = useLoadingModal();
   const [open, setOpen] = useState(false);
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -31,7 +32,7 @@ const CellAction = ({ data }: CellActionProps) => {
   };
   const onDelete = async () => {
     try {
-      setLoading(true);
+      onLoad();
       await axios.delete(`/api/${params.storeId}/brands/${data.id}`);
       router.refresh();
       toast.success("Brand deleted.");
@@ -39,7 +40,7 @@ const CellAction = ({ data }: CellActionProps) => {
       toast.error(error as any);
     } finally {
       setOpen(false);
-      setLoading(false);
+      onUnLoad();
     }
   };
 
@@ -49,7 +50,7 @@ const CellAction = ({ data }: CellActionProps) => {
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onDelete}
-        loading={loading}
+        loading={isLoading}
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

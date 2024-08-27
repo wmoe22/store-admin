@@ -10,11 +10,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useLoadingModal } from "@/hooks/use-loading";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Brand } from "@prisma/client";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import z from "zod";
@@ -41,7 +41,7 @@ type BrandFormValues = z.infer<typeof formSchema>;
 const CreateBrands = ({ initialData }: BrandFormProps) => {
   const params = useParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { isLoading, onLoad, onUnLoad } = useLoadingModal();
 
   const toastMessage = initialData ? "Brand updated" : "Brand created";
   const button = initialData ? "Update Brand" : "Create Brand";
@@ -57,7 +57,7 @@ const CreateBrands = ({ initialData }: BrandFormProps) => {
   const label = form.watch("name");
   const onSubmit = async (data: BrandFormValues) => {
     try {
-      setLoading(true);
+      onLoad();
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/brands/${params.brandId}`,
@@ -72,7 +72,7 @@ const CreateBrands = ({ initialData }: BrandFormProps) => {
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
-      setLoading(false);
+      onUnLoad();
     }
   };
   return (
@@ -95,7 +95,7 @@ const CreateBrands = ({ initialData }: BrandFormProps) => {
               <div className="hidden items-center gap-2 md:ml-auto md:flex">
                 <Button
                   size="sm"
-                  disabled={loading}
+                  disabled={isLoading}
                   form={"brand-form"}
                   type="submit"
                 >
@@ -129,7 +129,7 @@ const CreateBrands = ({ initialData }: BrandFormProps) => {
                                   <FormLabel>Name</FormLabel>
                                   <FormControl>
                                     <Input
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       placeholder="Brand name"
                                       {...field}
                                     />
@@ -146,7 +146,7 @@ const CreateBrands = ({ initialData }: BrandFormProps) => {
                                   <FormControl>
                                     <ImageUpload
                                       value={field.value ? [field.value] : []}
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       className="w-[400px] h-[400px]"
                                       onChange={(url) => field.onChange(url)}
                                       onRemove={() => field.onChange("")}
@@ -163,7 +163,7 @@ const CreateBrands = ({ initialData }: BrandFormProps) => {
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-2 md:hidden">
-                  <Button size="sm" disabled={loading} type="submit">
+                  <Button size="sm" disabled={isLoading} type="submit">
                     {button}
                   </Button>
                 </div>

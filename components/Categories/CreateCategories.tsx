@@ -13,7 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Billboard } from "@prisma/client";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -27,6 +26,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 
+import { useLoadingModal } from "@/hooks/use-loading";
 import { Category } from "@prisma/client";
 import {
   Select,
@@ -51,7 +51,7 @@ type CategoryFormValues = z.infer<typeof formSchema>;
 const CreateCategories = ({ initialData, billboards }: CategoryProps) => {
   const params = useParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { isLoading, onLoad, onUnLoad } = useLoadingModal();
 
   const toastMessage = initialData ? "Category updated" : "Category created";
   const button = initialData ? "Update Category" : "Create Category";
@@ -68,7 +68,7 @@ const CreateCategories = ({ initialData, billboards }: CategoryProps) => {
 
   const onSubmit = async (data: CategoryFormValues) => {
     try {
-      setLoading(true);
+      onLoad();
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/categories/${params.categoryId}`,
@@ -83,7 +83,7 @@ const CreateCategories = ({ initialData, billboards }: CategoryProps) => {
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
-      setLoading(false);
+      onUnLoad();
     }
   };
 
@@ -110,7 +110,7 @@ const CreateCategories = ({ initialData, billboards }: CategoryProps) => {
                 <div className="hidden items-center gap-2 md:ml-auto md:flex">
                   <Button
                     size="sm"
-                    disabled={loading}
+                    disabled={isLoading}
                     form="category-form"
                     type="submit"
                   >
@@ -144,7 +144,7 @@ const CreateCategories = ({ initialData, billboards }: CategoryProps) => {
                                     <FormLabel>Category</FormLabel>
                                     <FormControl>
                                       <Input
-                                        disabled={loading}
+                                        disabled={isLoading}
                                         placeholder="Category Name"
                                         {...field}
                                       />
@@ -162,7 +162,7 @@ const CreateCategories = ({ initialData, billboards }: CategoryProps) => {
                                   <FormItem>
                                     <FormLabel>Billboard</FormLabel>
                                     <Select
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       onValueChange={field.onChange}
                                       value={field.value}
                                       defaultValue={field.value}
@@ -197,7 +197,7 @@ const CreateCategories = ({ initialData, billboards }: CategoryProps) => {
                     </div>
                   </div>
                   <div className="flex items-center justify-center gap-2 md:hidden">
-                    <Button size="sm" type="submit" disabled={loading}>
+                    <Button size="sm" type="submit" disabled={isLoading}>
                       {button}
                     </Button>
                   </div>

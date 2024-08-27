@@ -12,11 +12,9 @@ const BillboardPage = async ({
     },
   });
   return (
-    <div>
-      <div>
-        <CreateBillboards initialData={billboard} />
-      </div>
-    </div>
+    <>
+      <CreateBillboards initialData={billboard} />
+    </>
   );
 };
 

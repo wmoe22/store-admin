@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useLoadingModal } from "@/hooks/use-loading";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Store } from "@prisma/client";
 import axios from "axios";
@@ -45,7 +46,7 @@ const formSchema = z.object({
 type SettingsFormValues = z.infer<typeof formSchema>;
 
 export function Settings({ initialData }: SettingsFormProps) {
-  const [loading, setLoading] = useState(false);
+  const { isLoading, onLoad, onUnLoad } = useLoadingModal();
   const [open, setOpen] = useState(false);
   const params = useParams();
   const router = useRouter();
@@ -62,18 +63,19 @@ export function Settings({ initialData }: SettingsFormProps) {
 
   const onSubmit = async (data: SettingsFormValues) => {
     try {
-      setLoading(true);
+      onLoad();
       await axios.patch(`/api/stores/${params.storeId}`, data);
       router.refresh();
       toast.success("Store updated!");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
-      setLoading(false);
+      onUnLoad();
     }
   };
 
   const onDelete = async () => {
+    onLoad();
     try {
       await axios.delete(`/api/stores/${params.storeId}`);
       router.refresh();
@@ -82,7 +84,7 @@ export function Settings({ initialData }: SettingsFormProps) {
     } catch (error) {
       toast.error("Make sure you removed all products and categories first.");
     } finally {
-      setLoading(false);
+      onUnLoad();
       setOpen(false);
     }
   };
@@ -93,7 +95,7 @@ export function Settings({ initialData }: SettingsFormProps) {
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onDelete}
-        loading={loading}
+        loading={isLoading}
       />
       <div className="flex min-h-screen w-full flex-col">
         <main className="flex min-h-screen flex-1 flex-col gap-4 bg-transparent p-4 md:gap-8 md:p-10">
@@ -121,7 +123,7 @@ export function Settings({ initialData }: SettingsFormProps) {
                               <FormLabel>Name</FormLabel>
                               <FormControl>
                                 <Input
-                                  disabled={loading}
+                                  disabled={isLoading}
                                   placeholder="Store Name"
                                   {...field}
                                   className="w-full"
@@ -139,7 +141,7 @@ export function Settings({ initialData }: SettingsFormProps) {
                               <FormControl>
                                 <ImageUpload
                                   value={field.value ? [field.value] : []}
-                                  disabled={loading}
+                                  disabled={isLoading}
                                   className="w-[100px] h-[100px]"
                                   onChange={(url) => field.onChange(url)}
                                   onRemove={() => field.onChange("")}
@@ -152,7 +154,7 @@ export function Settings({ initialData }: SettingsFormProps) {
                       </div>
                     </CardContent>
                     <CardFooter className="border-t px-6 py-4">
-                      <Button disabled={loading} type="submit">
+                      <Button disabled={isLoading} type="submit">
                         Save Changes
                       </Button>{" "}
                     </CardFooter>

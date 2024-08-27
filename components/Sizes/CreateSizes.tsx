@@ -11,11 +11,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useLoadingModal } from "@/hooks/use-loading";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Size } from "@prisma/client";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -42,7 +42,7 @@ type SizeFormValues = z.infer<typeof formSchema>;
 const CreateSizes = ({ initialData }: SizeFormProps) => {
   const params = useParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { isLoading, onLoad, onUnLoad } = useLoadingModal();
 
   const toastMessage = initialData ? "Size updated" : "Size created";
   const button = initialData ? "Update Size" : "Create Size";
@@ -60,7 +60,7 @@ const CreateSizes = ({ initialData }: SizeFormProps) => {
 
   const onSubmit = async (data: SizeFormValues) => {
     try {
-      setLoading(true);
+      onLoad();
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/sizes/${params.sizeId}`,
@@ -75,7 +75,7 @@ const CreateSizes = ({ initialData }: SizeFormProps) => {
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
-      setLoading(false);
+      onUnLoad();
     }
   };
   return (
@@ -100,7 +100,7 @@ const CreateSizes = ({ initialData }: SizeFormProps) => {
               <div className="hidden items-center gap-2 md:ml-auto md:flex">
                 <Button
                   size="sm"
-                  disabled={loading}
+                  disabled={isLoading}
                   type="submit"
                   form="size-form"
                 >
@@ -134,7 +134,7 @@ const CreateSizes = ({ initialData }: SizeFormProps) => {
                                   <FormLabel>Name</FormLabel>
                                   <FormControl>
                                     <Input
-                                      disabled={loading}
+                                      disabled={isLoading}
                                       placeholder="Size name"
                                       {...field}
                                     />
@@ -154,7 +154,7 @@ const CreateSizes = ({ initialData }: SizeFormProps) => {
                                   <FormControl>
                                     <div className="flex items-center gap-x-4 ">
                                       <Input
-                                        disabled={loading}
+                                        disabled={isLoading}
                                         placeholder="Size value"
                                         {...field}
                                       />
@@ -171,7 +171,7 @@ const CreateSizes = ({ initialData }: SizeFormProps) => {
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-2 md:hidden">
-                  <Button size="sm" type="submit" disabled={loading}>
+                  <Button size="sm" type="submit" disabled={isLoading}>
                     {button}
                   </Button>
                 </div>

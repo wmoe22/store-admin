@@ -20,9 +20,9 @@ const SizePage = async ({ params }: { params: { storeId: string } }) => {
     createdAt: format(item.createdAt, "MMMM do, yyyy"),
   }));
   return (
-    <div>
+    <>
       <Sizes sizes={formattedSizes} />
-    </div>
+    </>
   );
 };
 
