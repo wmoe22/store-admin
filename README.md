@@ -15,3 +15,4 @@ Built with Next.Js, React, Tailwind, Shadcn Ui, TypeScript, Prisma
 - Table Filters: Filters for each data table.
 - API Management: Robust system with differentiated public and admin access.
 - Data Visualization: More graph and chart options for data analysis.
+"# admin-dashboard-ziziu" 
